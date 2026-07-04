@@ -87,6 +87,8 @@ npm run build && npm run start
 | `next.config.ts` | Wrapper `withPayload()` |
 | `.env.example` | Variables d'environnement requises |
 
+**Compatibilité Vercel** : la collection `media` bascule automatiquement sur `@payloadcms/storage-vercel-blob` dès que `BLOB_READ_WRITE_TOKEN` est présent dans l'environnement (le disque local reste utilisé en développement). Nécessaire car le système de fichiers de Vercel est éphémère.
+
 ---
 
 ## 4. Ce qui reste à faire
