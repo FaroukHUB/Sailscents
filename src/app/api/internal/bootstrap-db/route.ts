@@ -1,9 +1,16 @@
-import { pushDevSchema } from '@payloadcms/drizzle'
-import type { DrizzleAdapter } from '@payloadcms/drizzle/types'
 import { NextResponse } from 'next/server'
 import { Pool } from 'pg'
 
 import { getPayloadClient } from '@/lib/payload'
+
+/** Sous-ensemble des champs de l'adaptateur Postgres dont on a besoin ici. */
+type PostgresAdapterShape = {
+  schema: Record<string, unknown>
+  drizzle: Parameters<typeof import('drizzle-kit/api').pushSchema>[1]
+  schemaName?: string
+  tablesFilter?: string[]
+  extensions?: Record<string, boolean>
+}
 
 /**
  * Route de diagnostic + bootstrap temporaire.
@@ -11,6 +18,13 @@ import { getPayloadClient } from '@/lib/payload'
  * connecte reellement, liste les tables avant/apres le push, et n'avale
  * aucune erreur silencieusement. A supprimer une fois de vraies migrations
  * Payload en place.
+ *
+ * N'utilise PAS `pushDevSchema` de @payloadcms/drizzle : cette fonction
+ * charge drizzle-kit via `createRequire(import.meta.url)`, qui resout un
+ * chemin fige au moment du build (`/vercel/path0/...`) inexistant a
+ * l'execution sur Vercel (`/var/task/...`), meme quand drizzle-kit est
+ * bien present et resoluble depuis notre propre code. On reimplemente donc
+ * ici la meme logique via un import direct de drizzle-kit/api.
  */
 export const maxDuration = 60
 
@@ -63,14 +77,16 @@ export async function GET(request: Request) {
   const connection = describeConnection()
   const diagnostics: Record<string, unknown> = { connection }
 
+  let pushSchema: typeof import('drizzle-kit/api').pushSchema
   try {
-    await import('drizzle-kit/api')
+    ;({ pushSchema } = await import('drizzle-kit/api'))
     diagnostics.drizzleKitModule = { resolvable: true }
   } catch (error) {
     diagnostics.drizzleKitModule = {
       resolvable: false,
       error: error instanceof Error ? error.message : String(error),
     }
+    return NextResponse.json(diagnostics, { status: 500 })
   }
 
   try {
@@ -82,7 +98,17 @@ export async function GET(request: Request) {
 
   try {
     const payload = await getPayloadClient()
-    await pushDevSchema(payload.db as unknown as DrizzleAdapter)
+    const adapter = payload.db as unknown as PostgresAdapterShape
+    const { apply, warnings, hasDataLoss } = await pushSchema(
+      adapter.schema,
+      adapter.drizzle,
+      adapter.schemaName ? [adapter.schemaName] : undefined,
+      adapter.tablesFilter,
+      adapter.extensions?.postgis ? ['postgis'] : undefined,
+    )
+    diagnostics.warnings = warnings
+    diagnostics.hasDataLoss = hasDataLoss
+    await apply()
     diagnostics.pushResult = 'ok'
   } catch (error) {
     diagnostics.pushResult = 'error'
