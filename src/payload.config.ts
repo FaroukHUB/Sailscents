@@ -1,5 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
@@ -43,6 +44,16 @@ export default buildConfig({
     Orders,
   ],
   editor: lexicalEditor(),
+  // Stockage cloud des médias sur Vercel (le système de fichiers y est éphémère).
+  // En local, sans BLOB_READ_WRITE_TOKEN, Payload conserve le stockage disque défini sur la collection Media.
+  plugins: process.env.BLOB_READ_WRITE_TOKEN
+    ? [
+        vercelBlobStorage({
+          collections: { media: true },
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+        }),
+      ]
+    : [],
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
