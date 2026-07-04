@@ -62,6 +62,10 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+    // Payload ne synchronise le schema automatiquement qu'en developpement.
+    // Sans migrations generees, la base de production resterait vide -> forcer le push
+    // le temps que le projet stabilise son schema (avant les premieres donnees clients reelles).
+    push: true,
   }),
   sharp,
 })
