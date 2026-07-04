@@ -64,6 +64,16 @@ export async function GET(request: Request) {
   const diagnostics: Record<string, unknown> = { connection }
 
   try {
+    await import('drizzle-kit/api')
+    diagnostics.drizzleKitModule = { resolvable: true }
+  } catch (error) {
+    diagnostics.drizzleKitModule = {
+      resolvable: false,
+      error: error instanceof Error ? error.message : String(error),
+    }
+  }
+
+  try {
     diagnostics.before = await listPublicTables()
   } catch (error) {
     diagnostics.beforeError = error instanceof Error ? { message: error.message, stack: error.stack } : String(error)

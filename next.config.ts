@@ -9,8 +9,10 @@ const nextConfig: NextConfig = {
   // echappe au tracage automatique des fichiers de Vercel : sans ceci, le module
   // est absent du bundle de la fonction serverless en production.
   serverExternalPackages: ['drizzle-kit'],
+  // Cle large ('**') plutot que le chemin exact de la route, pour eliminer tout
+  // risque de mauvaise correspondance avec la normalisation interne des routes.
   outputFileTracingIncludes: {
-    '/api/internal/bootstrap-db': ['./node_modules/drizzle-kit/**/*'],
+    '**': ['./node_modules/drizzle-kit/**/*'],
   },
 }
 
