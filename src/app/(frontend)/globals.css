@@ -50,3 +50,182 @@ a {
   background: var(--color-accent);
   color: var(--background);
 }
+
+/* Navigation par grands panneaux (accueil) */
+.panel-nav {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.panel-nav a {
+  position: relative;
+  flex: 1 1 0%;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 14rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(171, 138, 82, 0.45);
+}
+
+.panel-nav a:last-child {
+  border-bottom: none;
+}
+
+.panel-nav a::before {
+  content: '';
+  position: absolute;
+  inset: -4%;
+  background:
+    var(--panel-tint, radial-gradient(circle at 30% 20%, rgba(171, 138, 82, 0.16), transparent 60%)),
+    linear-gradient(160deg, var(--color-background-elevated), var(--background) 75%);
+  filter: grayscale(0.15);
+}
+
+.panel-nav a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent 60%);
+}
+
+.panel-nav .panel-label {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  opacity: 0.88;
+  transition: opacity 300ms ease;
+  max-width: 100%;
+  padding: 0 0.75rem;
+}
+
+.panel-title {
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.panel-subtitle {
+  font-size: 0.85rem;
+}
+
+.panel-nav a.is-leaving .panel-label {
+  opacity: 0.35;
+}
+
+/* Effet de fumee au clic, dans l'esprit de l'encens */
+.panel-nav .smoke {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.smoke-puff {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 237, 227, 0.6), rgba(244, 237, 227, 0) 70%);
+  filter: blur(16px);
+  transform: translate(-50%, -50%) scale(0.25);
+  opacity: 0;
+}
+
+.panel-nav a.is-leaving .smoke-puff {
+  animation: smoke-rise 750ms ease-out forwards;
+}
+
+.panel-nav a.is-leaving .smoke-puff-2 {
+  animation-delay: 90ms;
+}
+
+.panel-nav a.is-leaving .smoke-puff-3 {
+  animation-delay: 180ms;
+}
+
+@keyframes smoke-rise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -30%) scale(0.2);
+  }
+  35% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -140%) scale(1.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smoke-puff {
+    animation: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .panel-nav {
+    flex-direction: row;
+    height: 82vh;
+    min-height: 560px;
+  }
+
+  .panel-nav a {
+    min-height: 0;
+    min-width: 0;
+    border-bottom: none;
+    border-right: 1px solid rgba(171, 138, 82, 0.45);
+    transition: flex-grow 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    container-type: inline-size;
+  }
+
+  /* Le titre s'adapte a la largeur reelle du panneau : evite tout
+     chevauchement quand un panneau voisin s'agrandit au survol. */
+  @container (max-width: 260px) {
+    .panel-title {
+      font-size: 1.15rem;
+      letter-spacing: 0.06em;
+    }
+
+    .panel-subtitle {
+      font-size: 0.7rem;
+    }
+  }
+
+  @container (max-width: 190px) {
+    .panel-title {
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  .panel-nav a:last-child {
+    border-right: none;
+  }
+
+  .panel-nav a:hover {
+    flex-grow: 2.4;
+  }
+
+  .panel-nav a::before {
+    transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .panel-nav a:hover::before {
+    transform: scale(1.08);
+  }
+
+  .panel-nav .panel-label {
+    opacity: 0.75;
+    transition: opacity 500ms ease;
+  }
+
+  .panel-nav a:hover .panel-label {
+    opacity: 1;
+  }
+}
