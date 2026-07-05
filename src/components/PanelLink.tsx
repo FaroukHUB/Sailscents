@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -8,9 +9,11 @@ type Props = {
   tint: string
   title: string
   subtitle: string
+  imageUrl?: string
+  imageAlt?: string
 }
 
-export function PanelLink({ href, tint, title, subtitle }: Props) {
+export function PanelLink({ href, tint, title, subtitle, imageUrl, imageAlt }: Props) {
   const router = useRouter()
   const [leaving, setLeaving] = useState(false)
 
@@ -35,6 +38,16 @@ export function PanelLink({ href, tint, title, subtitle }: Props) {
       style={{ ['--panel-tint' as string]: tint }}
       className={leaving ? 'is-leaving' : undefined}
     >
+      {imageUrl && (
+        <Image
+          src={imageUrl}
+          alt={imageAlt ?? ''}
+          fill
+          sizes="(min-width: 768px) 30vw, 100vw"
+          className="panel-image"
+          priority={false}
+        />
+      )}
       <span className="panel-label">
         <span className="panel-title block uppercase">{title}</span>
         <span className="panel-subtitle mt-2 block font-[family-name:var(--font-display)] italic text-[color:var(--color-muted)]">
@@ -45,6 +58,8 @@ export function PanelLink({ href, tint, title, subtitle }: Props) {
         <span className="smoke-puff smoke-puff-1" />
         <span className="smoke-puff smoke-puff-2" />
         <span className="smoke-puff smoke-puff-3" />
+        <span className="smoke-puff smoke-puff-4" />
+        <span className="smoke-puff smoke-puff-5" />
       </span>
     </a>
   )

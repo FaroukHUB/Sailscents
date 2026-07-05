@@ -91,6 +91,12 @@ a {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent 60%);
 }
 
+.panel-image {
+  object-fit: cover;
+  filter: grayscale(0.35) brightness(0.85);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .panel-nav .panel-label {
   position: relative;
   z-index: 1;
@@ -123,42 +129,61 @@ a {
   pointer-events: none;
 }
 
+.panel-nav a.is-leaving::after {
+  background: rgba(244, 237, 227, 0.18);
+  transition: background 200ms ease;
+}
+
 .smoke-puff {
   position: absolute;
   left: 50%;
-  top: 55%;
-  width: 55%;
-  height: 55%;
+  top: 60%;
+  width: 75%;
+  height: 75%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(244, 237, 227, 0.6), rgba(244, 237, 227, 0) 70%);
-  filter: blur(16px);
-  transform: translate(-50%, -50%) scale(0.25);
+  background: radial-gradient(circle, rgba(248, 243, 235, 0.85), rgba(248, 243, 235, 0.35) 45%, rgba(248, 243, 235, 0) 72%);
+  filter: blur(10px);
+  transform: translate(-50%, -50%) scale(0.15);
   opacity: 0;
 }
 
 .panel-nav a.is-leaving .smoke-puff {
-  animation: smoke-rise 750ms ease-out forwards;
+  animation: smoke-rise 950ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.panel-nav a.is-leaving .smoke-puff-1 {
+  left: 40%;
+}
 .panel-nav a.is-leaving .smoke-puff-2 {
-  animation-delay: 90ms;
+  left: 60%;
+  animation-delay: 80ms;
 }
-
 .panel-nav a.is-leaving .smoke-puff-3 {
-  animation-delay: 180ms;
+  left: 50%;
+  animation-delay: 160ms;
+}
+.panel-nav a.is-leaving .smoke-puff-4 {
+  left: 30%;
+  animation-delay: 40ms;
+}
+.panel-nav a.is-leaving .smoke-puff-5 {
+  left: 70%;
+  animation-delay: 220ms;
 }
 
 @keyframes smoke-rise {
   0% {
     opacity: 0;
-    transform: translate(-50%, -30%) scale(0.2);
+    transform: translate(-50%, -20%) scale(0.15);
+    filter: blur(6px);
   }
-  35% {
-    opacity: 0.8;
+  25% {
+    opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -140%) scale(1.5);
+    transform: translate(-50%, -220%) scale(2.4);
+    filter: blur(22px);
   }
 }
 
@@ -217,6 +242,10 @@ a {
   }
 
   .panel-nav a:hover::before {
+    transform: scale(1.08);
+  }
+
+  .panel-nav a:hover .panel-image {
     transform: scale(1.08);
   }
 

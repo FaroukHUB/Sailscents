@@ -96,3 +96,13 @@ export type StaticPage = {
   layout?: PageBlock[]
   seo?: Seo
 }
+
+export type HomepagePanel = { image?: Media | number | null }
+
+export type Homepage = {
+  boutiquePanel?: HomepagePanel
+  collectionsPanel?: HomepagePanel
+  ateliersPanel?: HomepagePanel
+  journalPanel?: HomepagePanel
+  maisonPanel?: HomepagePanel
+}
