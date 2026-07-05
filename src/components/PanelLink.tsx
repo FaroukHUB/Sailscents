@@ -28,7 +28,9 @@ export function PanelLink({ href, tint, title, subtitle, imageUrl, imageAlt }: P
     }
 
     setLeaving(true)
-    window.setTimeout(() => router.push(href), 480)
+    // Doit correspondre a la duree de l'animation smoke-rise (+ decalages des
+    // puffs) dans globals.css, sans quoi la navigation coupe l'effet trop tot.
+    window.setTimeout(() => router.push(href), 2700)
   }
 
   return (

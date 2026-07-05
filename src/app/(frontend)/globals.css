@@ -143,7 +143,7 @@ a {
 }
 
 .panel-nav a.is-leaving .smoke-puff {
-  animation: smoke-rise 1100ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: smoke-rise 2200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .panel-nav a.is-leaving .smoke-puff-1 {
@@ -151,15 +151,15 @@ a {
 }
 .panel-nav a.is-leaving .smoke-puff-2 {
   left: 70%;
-  animation-delay: 120ms;
+  animation-delay: 180ms;
 }
 .panel-nav a.is-leaving .smoke-puff-3 {
   left: 50%;
-  animation-delay: 240ms;
+  animation-delay: 360ms;
 }
 .panel-nav a.is-leaving .smoke-puff-4 {
   left: 18%;
-  animation-delay: 60ms;
+  animation-delay: 90ms;
 }
 .panel-nav a.is-leaving .smoke-puff-5 {
   left: 82%;
