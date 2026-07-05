@@ -67,7 +67,7 @@ a {
   justify-content: center;
   min-height: 14rem;
   padding-bottom: 2.5rem;
-  border-bottom: 1px solid rgba(171, 138, 82, 0.45);
+  border-bottom: 2px solid rgba(171, 138, 82, 0.6);
 }
 
 .panel-nav a:last-child {
@@ -129,61 +129,56 @@ a {
   pointer-events: none;
 }
 
-.panel-nav a.is-leaving::after {
-  background: rgba(244, 237, 227, 0.18);
-  transition: background 200ms ease;
-}
-
 .smoke-puff {
   position: absolute;
   left: 50%;
-  top: 60%;
-  width: 75%;
-  height: 75%;
+  top: 68%;
+  width: 26%;
+  height: 26%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(248, 243, 235, 0.85), rgba(248, 243, 235, 0.35) 45%, rgba(248, 243, 235, 0) 72%);
-  filter: blur(10px);
-  transform: translate(-50%, -50%) scale(0.15);
+  background: radial-gradient(circle, rgba(248, 243, 235, 0.75), rgba(248, 243, 235, 0.3) 50%, rgba(248, 243, 235, 0) 75%);
+  filter: blur(6px);
+  transform: translate(-50%, -50%) scale(0.2);
   opacity: 0;
 }
 
 .panel-nav a.is-leaving .smoke-puff {
-  animation: smoke-rise 950ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: smoke-rise 1100ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .panel-nav a.is-leaving .smoke-puff-1 {
-  left: 40%;
+  left: 30%;
 }
 .panel-nav a.is-leaving .smoke-puff-2 {
-  left: 60%;
-  animation-delay: 80ms;
+  left: 70%;
+  animation-delay: 120ms;
 }
 .panel-nav a.is-leaving .smoke-puff-3 {
   left: 50%;
-  animation-delay: 160ms;
+  animation-delay: 240ms;
 }
 .panel-nav a.is-leaving .smoke-puff-4 {
-  left: 30%;
-  animation-delay: 40ms;
+  left: 18%;
+  animation-delay: 60ms;
 }
 .panel-nav a.is-leaving .smoke-puff-5 {
-  left: 70%;
-  animation-delay: 220ms;
+  left: 82%;
+  animation-delay: 300ms;
 }
 
 @keyframes smoke-rise {
   0% {
     opacity: 0;
-    transform: translate(-50%, -20%) scale(0.15);
-    filter: blur(6px);
+    transform: translate(-50%, -10%) scale(0.2);
+    filter: blur(4px);
   }
-  25% {
-    opacity: 1;
+  30% {
+    opacity: 0.9;
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -220%) scale(2.4);
-    filter: blur(22px);
+    transform: translate(-50%, -260%) scale(1.6);
+    filter: blur(14px);
   }
 }
 
@@ -204,7 +199,7 @@ a {
     min-height: 0;
     min-width: 0;
     border-bottom: none;
-    border-right: 1px solid rgba(171, 138, 82, 0.45);
+    border-right: 2px solid rgba(171, 138, 82, 0.6);
     transition: flex-grow 700ms cubic-bezier(0.16, 1, 0.3, 1);
     container-type: inline-size;
   }
