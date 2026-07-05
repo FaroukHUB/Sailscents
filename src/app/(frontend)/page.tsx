@@ -49,13 +49,13 @@ export default async function HomePage() {
   const homepage = (await payload.findGlobal({ slug: 'homepage' }).catch(() => null)) as Homepage | null
 
   return (
-    <div className="flex flex-col">
-      <div className="px-6 py-10 text-center">
+    <div className="relative h-dvh">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 px-6 py-8 text-center">
         <p className="text-xs tracking-[0.3em] text-[color:var(--color-accent)] uppercase">Maison sensorielle</p>
         <h1 className="mt-2 text-3xl md:text-4xl">{SITE_TAGLINE}</h1>
       </div>
 
-      <nav className="panel-nav" aria-label="Navigation principale">
+      <nav className="panel-nav h-full" aria-label="Navigation principale">
         {PANELS.map((panel) => {
           const image = homepage?.[panel.key]?.image
           const media = image && typeof image === 'object' ? (image as Media) : null

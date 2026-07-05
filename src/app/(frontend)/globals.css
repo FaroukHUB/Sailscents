@@ -304,8 +304,8 @@ a {
 @media (min-width: 768px) {
   .panel-nav {
     flex-direction: row;
-    height: 82vh;
-    min-height: 560px;
+    height: 100%;
+    min-height: 480px;
   }
 
   .panel-nav a {
