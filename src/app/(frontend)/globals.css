@@ -188,6 +188,119 @@ a {
   }
 }
 
+/* Rituel de sortie de l'accueil : obscurite -> filet dore -> ecrans qui
+   s'ecartent -> mise au point. Voir RitualTransition.tsx. */
+.ritual-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.ritual-panel {
+  position: absolute;
+  inset: 0 50% 0 0;
+  background: #030105;
+  opacity: 0;
+  transition:
+    opacity 700ms ease-in,
+    transform 650ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.ritual-panel-left {
+  left: 0;
+  right: 50%;
+  border-right: 1px solid rgba(171, 138, 82, 0.5);
+}
+
+.ritual-panel-right {
+  left: 50%;
+  right: 0;
+  border-left: 1px solid rgba(171, 138, 82, 0.5);
+}
+
+.ritual-phase-darkening .ritual-panel,
+.ritual-phase-ember .ritual-panel {
+  opacity: 1;
+}
+
+.ritual-phase-opening .ritual-panel,
+.ritual-phase-focusing .ritual-panel {
+  opacity: 1;
+}
+
+.ritual-phase-opening .ritual-panel-left,
+.ritual-phase-focusing .ritual-panel-left {
+  transform: translateX(-100%);
+}
+
+.ritual-phase-opening .ritual-panel-right,
+.ritual-phase-focusing .ritual-panel-right {
+  transform: translateX(100%);
+}
+
+.ritual-ember {
+  position: absolute;
+  top: 50%;
+  left: -25%;
+  width: 35%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(171, 138, 82, 0.9), transparent);
+  opacity: 0;
+}
+
+.ritual-phase-ember .ritual-ember {
+  animation: ember-sweep 450ms ease-in-out forwards;
+}
+
+@keyframes ember-sweep {
+  0% {
+    left: -25%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+.ritual-focus {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  backdrop-filter: blur(0);
+}
+
+.ritual-phase-focusing .ritual-focus {
+  opacity: 1;
+  backdrop-filter: blur(16px);
+  animation: ritual-defocus 500ms ease-out forwards;
+}
+
+@keyframes ritual-defocus {
+  from {
+    backdrop-filter: blur(16px);
+  }
+  to {
+    backdrop-filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ritual-panel,
+  .ritual-ember,
+  .ritual-focus {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 @media (min-width: 768px) {
   .panel-nav {
     flex-direction: row;

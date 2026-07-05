@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+import { useRitualExit } from '@/components/RitualTransition'
+
 type Props = {
   href: string
   tint: string
@@ -15,6 +17,7 @@ type Props = {
 
 export function PanelLink({ href, tint, title, subtitle, imageUrl, imageAlt }: Props) {
   const router = useRouter()
+  const beginRitual = useRitualExit()
   const [leaving, setLeaving] = useState(false)
 
   const handleClick = (event: React.MouseEvent) => {
@@ -28,9 +31,7 @@ export function PanelLink({ href, tint, title, subtitle, imageUrl, imageAlt }: P
     }
 
     setLeaving(true)
-    // Doit correspondre a la duree de l'animation smoke-rise (+ decalages des
-    // puffs) dans globals.css, sans quoi la navigation coupe l'effet trop tot.
-    window.setTimeout(() => router.push(href), 2700)
+    beginRitual(href)
   }
 
   return (
