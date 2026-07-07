@@ -16,7 +16,6 @@ import { ProductCollections } from './collections/ProductCollections'
 import { Products } from './collections/Products'
 import { Redirects } from './collections/Redirects'
 import { Users } from './collections/Users'
-import { Workshops } from './collections/Workshops'
 import { Homepage } from './globals/Homepage'
 
 const filename = fileURLToPath(import.meta.url)
@@ -39,7 +38,6 @@ export default buildConfig({
     Products,
     Pages,
     Articles,
-    Workshops,
     Faqs,
     Redirects,
     Orders,

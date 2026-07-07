@@ -12,7 +12,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-display: var(--font-cormorant);
+  --font-display: var(--font-shippori);
   --font-sans: var(--font-jost);
 }
 
@@ -365,4 +365,238 @@ a {
   .panel-nav a:hover .panel-label {
     opacity: 1;
   }
+}
+
+/* ------------------------------------------------------------------ *
+ * Pages editoriales (La Maison, Le Rituel, Le Journal)
+ * Palette inchangee : fond violet profond, texte creme, or en accent.
+ * Les images sont pour l'instant des aplats CSS (fumee + horizon dore) :
+ * des reperes de mise en page a remplacer par les vraies photos.
+ * ------------------------------------------------------------------ */
+
+.kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Filet dore fin, motif recurrent de la marque (rappel du rituel). */
+.gold-rule {
+  width: 3.5rem;
+  height: 1px;
+  border: none;
+  margin: 1.75rem 0;
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+}
+
+.gold-rule-center {
+  margin-left: auto;
+  margin-right: auto;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+}
+
+/* Fil d'Ariane */
+.breadcrumb {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+/* Hero editorial : bandeau plein cadre, fumee qui monte sur fond violet. */
+.editorial-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 72vh;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(2rem, 6vw, 5rem);
+  background:
+    radial-gradient(120% 90% at 50% 120%, rgba(171, 138, 82, 0.16), transparent 55%),
+    radial-gradient(80% 60% at 70% -10%, rgba(120, 100, 140, 0.28), transparent 60%),
+    linear-gradient(180deg, var(--color-background-elevated), var(--background) 70%);
+}
+
+/* Volute de fumee suggeree derriere le titre. */
+.editorial-hero::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -10%;
+  width: 42%;
+  height: 120%;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(244, 237, 227, 0.09), transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.editorial-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 46rem;
+}
+
+.editorial-hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  line-height: 1.05;
+}
+
+.editorial-lede {
+  margin-top: 1.5rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: var(--color-muted);
+  max-width: 40rem;
+}
+
+/* Corps editorial : sections alternees texte / image. */
+.editorial-body {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 2rem);
+}
+
+.editorial-section {
+  padding: clamp(2rem, 5vw, 3.5rem) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.editorial-section:first-of-type {
+  border-top: none;
+}
+
+.editorial-section h2 {
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+}
+
+.editorial-section p {
+  margin-top: 1rem;
+  color: var(--color-muted);
+  max-width: 42rem;
+}
+
+.editorial-split {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .editorial-split {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .editorial-split.is-reversed .editorial-figure {
+    order: -1;
+  }
+}
+
+/* Reperes d'image (aplat CSS a remplacer par une vraie photo). */
+.editorial-figure {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid rgba(171, 138, 82, 0.28);
+  background:
+    radial-gradient(90% 70% at 30% 20%, rgba(120, 100, 140, 0.35), transparent 60%),
+    radial-gradient(70% 60% at 80% 90%, rgba(171, 138, 82, 0.22), transparent 55%),
+    linear-gradient(160deg, var(--color-background-elevated), var(--background));
+}
+
+.editorial-figure::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: auto 0 1rem 0;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(244, 237, 227, 0.45);
+}
+
+.editorial-figure figcaption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: rgba(244, 237, 227, 0.7);
+}
+
+/* Bloc rendez-vous (Le Rituel). */
+.appointment {
+  margin-top: clamp(2rem, 6vw, 4rem);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+  border: 1px solid rgba(171, 138, 82, 0.35);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(171, 138, 82, 0.08), transparent 60%);
+}
+
+.appointment h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.appointment p {
+  margin: 1rem auto 0;
+  max-width: 34rem;
+  color: var(--color-muted);
+}
+
+.btn-gold {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.9rem 2.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  transition:
+    background-color 400ms ease,
+    color 400ms ease;
+}
+
+.btn-gold:hover {
+  background: var(--color-accent);
+  color: var(--background);
+}
+
+/* Grille du Journal. */
+.journal-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .journal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .journal-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.journal-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+  border: 1px solid var(--color-border);
+  transition: border-color 400ms ease;
+}
+
+.journal-card:hover {
+  border-color: var(--color-accent);
 }

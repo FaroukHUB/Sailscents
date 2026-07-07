@@ -60,19 +60,6 @@ export type ProductCollection = {
   seo?: Seo
 }
 
-export type Workshop = {
-  id: number
-  name: string
-  slug: string
-  shortDescription?: string | null
-  description?: unknown
-  location?: string | null
-  duration?: string | null
-  price?: number | null
-  sessions?: { date: string; seatsAvailable?: number | null }[]
-  seo?: Seo
-}
-
 export type Article = {
   id: number
   title: string

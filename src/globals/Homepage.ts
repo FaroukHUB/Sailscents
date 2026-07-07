@@ -19,7 +19,7 @@ export const Homepage: GlobalConfig = {
   fields: [
     panelField('boutiquePanel', 'Bandeau — Boutique'),
     panelField('collectionsPanel', 'Bandeau — Collections'),
-    panelField('ateliersPanel', 'Bandeau — Ateliers'),
+    panelField('ateliersPanel', 'Bandeau — Le Rituel'),
     panelField('journalPanel', 'Bandeau — Le Journal'),
     panelField('maisonPanel', 'Bandeau — La Maison'),
   ],

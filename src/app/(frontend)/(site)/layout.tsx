@@ -5,7 +5,7 @@ import { SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
 const NAV_LINKS = [
   { href: '/boutique', label: 'Boutique' },
   { href: '/collections', label: 'Collections' },
-  { href: '/ateliers', label: 'Ateliers' },
+  { href: '/rituel', label: 'Le Rituel' },
   { href: '/journal', label: 'Le Journal' },
   { href: '/maison', label: 'La Maison' },
 ]

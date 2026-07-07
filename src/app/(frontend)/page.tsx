@@ -23,9 +23,9 @@ const PANELS = [
   },
   {
     key: 'ateliersPanel',
-    href: '/ateliers',
-    title: 'Les Ateliers',
-    subtitle: 'Vivre une expérience sensorielle.',
+    href: '/rituel',
+    title: 'Le Rituel',
+    subtitle: 'Vivre l’expérience du tatami.',
     tint: 'radial-gradient(circle at 50% 15%, rgba(171, 138, 82, 0.16), transparent 65%)',
   },
   {

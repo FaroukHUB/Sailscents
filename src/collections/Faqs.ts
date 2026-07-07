@@ -8,9 +8,8 @@ export const Faqs: CollectionConfig = {
   fields: [
     { name: 'question', type: 'text', required: true },
     { name: 'answer', type: 'richText', required: true },
-    { name: 'category', type: 'text', label: 'Thème (ex : Livraison, Produits, Ateliers)' },
+    { name: 'category', type: 'text', label: 'Thème (ex : Livraison, Produits, Le Rituel)' },
     { name: 'relatedProduct', type: 'relationship', relationTo: 'products' },
-    { name: 'relatedWorkshop', type: 'relationship', relationTo: 'workshops' },
     { name: 'order', type: 'number', label: "Ordre d'affichage" },
   ],
 }

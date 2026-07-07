@@ -15,15 +15,18 @@ Stack posée : **Next.js 15.4.11 (App Router) + Payload CMS 3.85.2 (embarqué) +
 - Alias `@payload-config` configuré (`tsconfig.json`) vers `src/payload.config.ts`.
 
 ### Payload CMS — 11 collections + champs SEO réutilisables
-- `users` (auth + rôles), `media` (upload, alt obligatoire), `categories` (univers), `productCollections`, `products`, `pages` (page builder à blocs), `articles` (journal), `workshops` (ateliers + sessions), `faqs`, `redirects`, `orders` (squelette).
+- `users` (auth + rôles), `media` (upload, alt obligatoire), `categories` (univers), `productCollections`, `products`, `pages` (page builder à blocs), `articles` (journal), `faqs`, `redirects`, `orders` (squelette).
+- La collection `workshops` (« ateliers ») a été retirée : la prestation réelle est **Le Rituel**, une séance privée sur rendez-vous (gratuite) présentée sous forme de page éditoriale, pas un catalogue d'ateliers avec sessions/prix.
 - Champ **`slug`** réutilisable (`src/fields/slug.ts`) : généré automatiquement depuis le titre si laissé vide, normalisé, unique.
-- Groupe **`seo`** réutilisable (`src/fields/seo.ts`) appliqué à `products`, `categories`, `productCollections`, `pages`, `articles`, `workshops` : `metaTitle`, `metaDescription`, `ogImage`, `canonical`, `noIndex`, `structuredData` — exactement les champs demandés.
+- Groupe **`seo`** réutilisable (`src/fields/seo.ts`) appliqué à `products`, `categories`, `productCollections`, `pages`, `articles` : `metaTitle`, `metaDescription`, `ogImage`, `canonical`, `noIndex`, `structuredData` — exactement les champs demandés.
 - Rôles utilisateurs Payload : Super Admin, Gérant boutique, Éditeur de contenu, Support client, avec `access control` empêchant un non-Super-Admin de modifier les rôles.
 
 ### Front (App Router)
 Routes créées et **testées en local** (réponses HTTP 200) :
-`/`, `/boutique`, `/boutique/[category]`, `/boutique/[category]/[product]`, `/collections`, `/collections/[slug]`, `/ateliers`, `/ateliers/[slug]`, `/journal`, `/journal/[slug]`, `/faq`, `/[slug]` (pages légales/statiques génériques).
-Chaque route dynamique lit les données via la Local API Payload, génère ses métadonnées (`generateMetadata`) à partir du groupe `seo`, et injecte le JSON-LD pertinent (`Product`, `Event`, `BlogPosting`, `FAQPage`).
+`/`, `/maison`, `/rituel`, `/boutique`, `/boutique/[category]`, `/boutique/[category]/[product]`, `/collections`, `/collections/[slug]`, `/journal`, `/journal/[slug]`, `/faq`, `/[slug]` (pages légales/statiques génériques).
+Chaque route dynamique lit les données via la Local API Payload, génère ses métadonnées (`generateMetadata`) à partir du groupe `seo`, et injecte le JSON-LD pertinent (`Product`, `BlogPosting`, `FAQPage`, `Service`, `AboutPage`, `Organization`, `BreadcrumbList`).
+- **Pages éditoriales `/maison`, `/rituel`, `/journal`** : hero plein cadre, fil d'Ariane, sections sémantiques (`section`/`h2`/`figure`), JSON-LD dédié. Le texte et les images sont pour l'instant des maquettes (aplats CSS + copie par défaut) à remplacer par les vraies photos/contenus du client.
+- **Identité typographique** : titres en **Shippori Mincho** (mincho japonais traditionnel, esprit Kōdō, support latin) ; corps en Jost. Palette inchangée : violet profond + or.
 
 ### SEO
 - `src/app/sitemap.ts` — sitemap dynamique généré depuis les collections publiées (exclut les documents `noIndex`).

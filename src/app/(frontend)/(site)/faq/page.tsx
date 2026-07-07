@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 export const generateMetadata = async () =>
   buildMetadata({
     fallbackTitle: 'Foire aux questions',
-    fallbackDescription: 'Livraison, produits, ateliers : toutes les réponses à vos questions.',
+    fallbackDescription: 'Livraison, produits, Le Rituel : toutes les réponses à vos questions.',
     path: '/faq',
   })
 
