@@ -9,16 +9,29 @@ import type { Article } from '@/types/content'
 export const dynamic = 'force-dynamic'
 
 const PATH = '/journal'
-const TITLE = 'Le Journal'
+const TITLE = 'Le Journal — Oud, Attars, encens Kōdō, thés et cafés rares'
 const DESCRIPTION =
-  'Récits, rituels et savoir-faire autour du bois de Oud, des Attars, du café et du thé d’exception — la connaissance d’une maison de connaisseurs.'
+  'Le Journal Sailscents : récits, guides et savoir-faire autour du bois de Oud, des Attars, de l’encens et de la voie du Kōdō, des thés et cafés d’exception d’Asie orientale. La connaissance d’une maison de connaisseurs.'
 
 // Piliers editoriaux : ils annoncent la ligne du Journal et servent de reperes
 // thematiques pour Google, meme avant publication des premiers articles.
 const PILLARS = [
-  { title: 'Le bois de Oud', text: 'Origines, récoltes et distillation d’une matière parmi les plus précieuses au monde.' },
-  { title: 'La voie du Kōdō', text: 'L’art japonais d’écouter l’encens, entre silence, lenteur et attention.' },
-  { title: 'Thés & cafés d’Asie', text: 'Les crus rares d’Extrême-Orient qui accompagnent nos dégustations.' },
+  {
+    title: 'Le bois de Oud',
+    text: 'Origines, récoltes et distillation de l’agar. Comprendre pourquoi le Oud d’Assam ou du Cambodge compte parmi les matières les plus précieuses de la parfumerie.',
+  },
+  {
+    title: 'Les Attars',
+    text: 'Les huiles parfumées sans alcool : fabrication, histoire et manière de les porter. Ce qui distingue un Attar d’un parfum classique.',
+  },
+  {
+    title: 'La voie du Kōdō',
+    text: 'L’art japonais d’écouter l’encens, entre silence, lenteur et attention. Traditions, gestes et sens du rituel.',
+  },
+  {
+    title: 'Thés & cafés d’Asie',
+    text: 'Les crus rares d’Extrême-Orient qui accompagnent nos dégustations, et l’accord entre le palais et le nez.',
+  },
 ]
 
 export const generateMetadata = async () =>
@@ -69,6 +82,25 @@ export default async function JournalPage() {
       </header>
 
       <div className="editorial-body">
+        <section className="editorial-section" aria-labelledby="demarche">
+          <p className="kicker">Notre démarche</p>
+          <h2 id="demarche" className="mt-3">Comprendre autant que sentir</h2>
+          <div className="editorial-prose">
+            <p>
+              Un parfum rare ne se résume pas à une odeur : il porte une histoire, une géographie,
+              un savoir-faire. Le Journal de Sailscents existe pour rendre cette connaissance
+              accessible — d’où vient un bois de Oud, comment se distille un Attar, ce que signifie
+              vraiment la voie du Kōdō, pourquoi un thé ou un café d’exception change une dégustation.
+            </p>
+            <p>
+              Nous écrivons ces récits avec la rigueur d’une maison qui connaît son sujet, pour que
+              chaque lecteur — curieux ou amateur averti — reparte en comprenant mieux ce qu’il sent.
+              C’est aussi notre façon de partager, en toute transparence, l’exigence qui guide notre
+              sélection.
+            </p>
+          </div>
+        </section>
+
         {list.length > 0 ? (
           <section aria-label="Articles du Journal">
             <ul className="journal-grid">

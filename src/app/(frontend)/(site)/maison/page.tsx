@@ -1,26 +1,50 @@
 import Link from 'next/link'
 
 import { buildMetadata } from '@/lib/seo'
-import { breadcrumbJsonLd, webPageJsonLd } from '@/lib/structured-data'
+import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
 
-// Page editoriale : contenu maquette (le client affinera le texte et fournira
-// les vraies photos). Structure semantique pensee pour l'indexation Google.
+// Page editoriale : contenu redige pour l'indexation et la conversion (le
+// client pourra affiner le texte et fournir les vraies photos ensuite).
 export const dynamic = 'force-dynamic'
 
 const PATH = '/maison'
-const TITLE = 'La Maison'
+const TITLE = 'La Maison — parfumerie de niche : Oud, Attars, encens'
 const DESCRIPTION =
-  'Sailscents, maison sensorielle de connaisseurs : bois de Oud, Attars, encens, thés et cafés d’exception d’Asie orientale, choisis avec exigence.'
+  'Sailscents, maison de parfumerie de niche et de connaisseurs : bois de Oud, Attars (huiles parfumées), encens de la voie du Kōdō, thés et cafés d’exception d’Asie orientale, sélectionnés avec exigence.'
+
+const FAQ = [
+  {
+    question: 'Qu’est-ce qu’une maison de parfumerie de niche ?',
+    answer:
+      'Une maison de niche crée et sélectionne des parfums en petites quantités, loin de la distribution de masse. Elle privilégie la qualité des matières premières, la rareté et l’identité olfactive plutôt que le volume. Chez Sailscents, cela signifie des bois de Oud, des Attars et des encens choisis un à un, pour leur origine et leur caractère.',
+  },
+  {
+    question: 'Quelle est la différence entre un Attar et un parfum classique ?',
+    answer:
+      'Un Attar est une huile parfumée concentrée, traditionnellement obtenue par distillation de fleurs, de bois ou de résines, souvent sur une base de bois de santal. Contrairement à un parfum alcoolisé, il ne contient pas d’alcool : il se pose sur la peau, évolue lentement et tient longtemps. Sa concentration en fait une signature intime et durable.',
+  },
+  {
+    question: 'D’où vient le bois de Oud que vous proposez ?',
+    answer:
+      'Le Oud, ou bois d’agar, provient principalement d’Asie du Sud-Est — notamment de l’Assam en Inde et du Cambodge. C’est l’une des matières les plus précieuses de la parfumerie, née de la résine que produit l’arbre Aquilaria lorsqu’il est infecté. Nous privilégions des sources traçables et des récoltes limitées.',
+  },
+  {
+    question: 'Peut-on découvrir vos parfums avant d’acheter ?',
+    answer:
+      'Oui. Nous recevons sur rendez-vous, sans frais, pour une séance privée de découverte — Le Rituel. C’est le meilleur moyen de sentir, comparer et comprendre les matières avant de choisir. La vente n’est jamais l’objectif : la rencontre avec l’odeur juste l’est.',
+  },
+]
 
 export const generateMetadata = async () =>
   buildMetadata({ fallbackTitle: TITLE, fallbackDescription: DESCRIPTION, path: PATH })
 
 export default function MaisonPage() {
   const jsonLd = [
-    webPageJsonLd({ path: PATH, name: TITLE, description: DESCRIPTION, type: 'AboutPage' }),
+    webPageJsonLd({ path: PATH, name: 'La Maison', description: DESCRIPTION, type: 'AboutPage' }),
+    faqPageJsonLd(FAQ),
     breadcrumbJsonLd([
       { name: 'Accueil', path: '/' },
-      { name: TITLE, path: PATH },
+      { name: 'La Maison', path: PATH },
     ]),
   ]
 
@@ -39,11 +63,12 @@ export default function MaisonPage() {
           <nav className="breadcrumb" aria-label="Fil d’Ariane">
             <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> La Maison
           </nav>
-          <p className="kicker mt-6">Maison sensorielle</p>
+          <p className="kicker mt-6">Maison sensorielle de connaisseurs</p>
           <h1 className="mt-3">La Maison</h1>
           <p className="editorial-lede">
-            Nous ne vendons pas un parfum. Nous transmettons une connaissance — celle des matières
-            rares, du geste juste et du temps qu’il faut pour comprendre une odeur.
+            Sailscents est une maison de parfumerie de niche dédiée aux matières les plus rares —
+            bois de Oud, Attars, encens de la voie du Kōdō, thés et cafés d’exception. Nous ne
+            vendons pas un flacon : nous transmettons une connaissance.
           </p>
         </div>
       </header>
@@ -52,24 +77,65 @@ export default function MaisonPage() {
         <section className="editorial-section" aria-labelledby="metier">
           <p className="kicker">Notre métier</p>
           <h2 id="metier" className="mt-3">Des connaisseurs, pas des marchands</h2>
-          <p>
-            Sailscents est née d’une obsession : la précision. Chaque bois de Oud, chaque Attar,
-            chaque encens est choisi pour son origine, sa méthode d’extraction et sa signature
-            olfactive. Nous parlons matières premières, distillation et maturation comme d’autres
-            parlent de crus. C’est cette exigence qui distingue une maison d’un simple revendeur.
-          </p>
+          <div className="editorial-prose">
+            <p>
+              Sailscents est née d’une conviction simple : un grand parfum ne se vend pas, il se
+              comprend. Là où la parfumerie de masse cherche le volume et la nouveauté permanente,
+              nous cultivons l’inverse — la rareté, la patience et la précision. Chaque bois de Oud,
+              chaque Attar, chaque encens qui entre dans notre sélection a été senti, comparé et
+              éprouvé avant d’être retenu.
+            </p>
+            <p>
+              Nous parlons matières premières, méthodes de distillation et maturation comme d’autres
+              parlent de grands crus. Cette exigence n’est pas un argument marketing : c’est ce qui
+              distingue une <strong>maison de connaisseurs</strong> d’un simple revendeur. Elle guide
+              tout ce que nous proposons, du plus discret des encens au plus précieux des Attars.
+            </p>
+          </div>
+
+          <div className="trust-row">
+            <div className="trust-item">
+              <h3>Sélection rare</h3>
+              <p>Des récoltes limitées et des producteurs choisis, jamais de production de masse.</p>
+            </div>
+            <div className="trust-item">
+              <h3>Conseil d’expert</h3>
+              <p>Une connaissance réelle des matières, transmise sans jargon ni précipitation.</p>
+            </div>
+            <div className="trust-item">
+              <h3>Expérience unique</h3>
+              <p>La découverte sur le tatami, autour de l’encensoir — Le Rituel Sailscents.</p>
+            </div>
+          </div>
         </section>
 
         <section className="editorial-section" aria-labelledby="matieres">
           <div className="editorial-split">
-            <div>
+            <div className="editorial-prose">
               <p className="kicker">Les matières</p>
               <h2 id="matieres" className="mt-3">Du Oud aux infusions d’Extrême-Orient</h2>
               <p>
-                Bois de Oud d’Assam et du Cambodge, Attars pressés à froid, encens de la voie du
-                Kōdō, thés et cafés d’exception venus d’Asie orientale. Nous réunissons ce que les
-                traditions ont de plus abouti, sans jamais diluer la rareté.
+                Notre univers réunit ce que les grandes traditions olfactives ont de plus abouti,
+                sans jamais diluer la rareté :
               </p>
+              <ul>
+                <li>
+                  <strong>Le bois de Oud</strong> — d’Assam et du Cambodge, l’une des matières les
+                  plus précieuses au monde, à la profondeur boisée et animale inimitable.
+                </li>
+                <li>
+                  <strong>Les Attars</strong> — huiles parfumées concentrées, sans alcool, pressées
+                  et distillées selon des savoir-faire séculaires.
+                </li>
+                <li>
+                  <strong>L’encens</strong> — au cœur de la voie japonaise du Kōdō, l’art d’écouter
+                  les parfums brûlés.
+                </li>
+                <li>
+                  <strong>Les thés et cafés d’exception</strong> — crus rares d’Asie orientale qui
+                  prolongent l’expérience, du palais au nez.
+                </li>
+              </ul>
             </div>
             <figure className="editorial-figure" data-label="Photo à venir">
               <figcaption>Bois de Oud &amp; flacons d’Attars</figcaption>
@@ -79,14 +145,20 @@ export default function MaisonPage() {
 
         <section className="editorial-section" aria-labelledby="exigence">
           <div className="editorial-split is-reversed">
-            <div>
+            <div className="editorial-prose">
               <p className="kicker">L’exigence</p>
-              <h2 id="exigence" className="mt-3">Le sourcing avant tout</h2>
+              <h2 id="exigence" className="mt-3">Le sourcing, avant tout</h2>
               <p>
-                Rien n’entre dans notre sélection sans avoir été senti, comparé, éprouvé. La rareté
-                se mérite : nous privilégions les petits producteurs, les récoltes limitées et les
-                savoir-faire menacés. Ce que vous découvrez chez nous, peu de maisons peuvent le
-                proposer.
+                La rareté se mérite. Rien n’entre dans notre sélection sans avoir traversé le même
+                filtre : l’origine est-elle traçable ? La matière est-elle à la hauteur ? L’émotion
+                est-elle au rendez-vous ? Nous privilégions les petits producteurs, les récoltes
+                limitées et les savoir-faire menacés — quitte à proposer moins, mais mieux.
+              </p>
+              <h3>Une traçabilité assumée</h3>
+              <p>
+                Connaître la provenance d’un Oud ou d’un Attar, c’est respecter à la fois la matière,
+                l’artisan et le client. Ce que vous découvrez chez Sailscents, peu de maisons peuvent
+                le proposer — et c’est précisément ce qui fait la valeur d’une essence rare.
               </p>
             </div>
             <figure className="editorial-figure" data-label="Photo à venir">
@@ -95,14 +167,28 @@ export default function MaisonPage() {
           </div>
         </section>
 
-        <section className="editorial-section" aria-labelledby="suite">
+        <section className="faq" aria-labelledby="faq-maison">
+          <p className="kicker">Questions fréquentes</p>
+          <h2 id="faq-maison" className="mt-3">Comprendre notre univers</h2>
+          <div className="faq-list">
+            {FAQ.map((item) => (
+              <details key={item.question} className="faq-item">
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="appointment" aria-labelledby="suite">
           <p className="kicker">Aller plus loin</p>
           <h2 id="suite" className="mt-3">Vivez-le, ne le lisez pas</h2>
           <p>
             La meilleure façon de comprendre notre travail reste de le vivre : sur le tatami, autour
-            de l’encensoir, un thé ou un café d’exception à la main.
+            de l’encensoir, un thé ou un café d’exception à la main. Une séance privée, sur
+            rendez-vous et sans frais.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/rituel" className="btn-gold">
               Découvrir Le Rituel
             </Link>
