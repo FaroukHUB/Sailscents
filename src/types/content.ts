@@ -84,6 +84,19 @@ export type StaticPage = {
   seo?: Seo
 }
 
+export type PageMedia = {
+  rituel?: {
+    accueil?: Media | number | null
+    encens?: Media | number | null
+    degustation?: Media | number | null
+    decouverte?: Media | number | null
+  }
+  maison?: {
+    matieres?: Media | number | null
+    sourcing?: Media | number | null
+  }
+}
+
 export type HomepagePanel = { image?: Media | number | null }
 
 export type Homepage = {

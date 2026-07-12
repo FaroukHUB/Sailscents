@@ -1,7 +1,10 @@
 import Link from 'next/link'
 
+import { EditorialFigure } from '@/components/EditorialFigure'
+import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { breadcrumbJsonLd, faqPageJsonLd, serviceJsonLd } from '@/lib/structured-data'
+import type { PageMedia } from '@/types/content'
 
 // Page editoriale : contenu redige pour l'indexation et la conversion (le
 // client pourra affiner le texte et fournir les vraies photos ensuite).
@@ -14,6 +17,7 @@ const DESCRIPTION =
 
 const MOMENTS = [
   {
+    imageKey: 'accueil',
     kicker: 'Premier temps · L’accueil',
     title: 'Reçu sur le tatami',
     lead: 'On vous installe, on ralentit. Le temps se suspend, les gestes deviennent mesurés.',
@@ -21,6 +25,7 @@ const MOMENTS = [
     caption: 'Le tatami, l’espace du calme',
   },
   {
+    imageKey: 'encens',
     kicker: 'Deuxième temps · L’encens',
     title: 'La fumée au centre',
     lead: 'Au cœur de la pièce, l’encensoir diffuse une fumée parfumante et enivrante.',
@@ -28,6 +33,7 @@ const MOMENTS = [
     caption: 'L’encensoir et sa volute',
   },
   {
+    imageKey: 'degustation',
     kicker: 'Troisième temps · La dégustation',
     title: 'Thé & café d’exception',
     lead: 'Un thé ou un café rare d’Asie orientale accompagne la découverte.',
@@ -35,13 +41,14 @@ const MOMENTS = [
     caption: 'Thés et cafés d’Extrême-Orient',
   },
   {
+    imageKey: 'decouverte',
     kicker: 'Quatrième temps · La découverte',
     title: 'Les parfums rares',
     lead: 'Vient enfin l’essentiel : l’essai des essences les plus précieuses.',
     body: 'Bois de Oud, Attars, accords rares : chaque essence est présentée, expliquée, comparée. On prend le temps de comprendre d’où elle vient, comment elle a été obtenue, ce qu’elle raconte sur la peau. Une rencontre, pas une vente — vous repartez avec une connaissance, et parfois avec l’essence qui vous ressemble.',
     caption: 'Les essences précieuses',
   },
-]
+] as const
 
 const FAQ = [
   {
@@ -74,7 +81,12 @@ const FAQ = [
 export const generateMetadata = async () =>
   buildMetadata({ fallbackTitle: TITLE, fallbackDescription: DESCRIPTION, path: PATH })
 
-export default function RituelPage() {
+export default async function RituelPage() {
+  const payload = await getPayloadClient()
+  const media = (await payload
+    .findGlobal({ slug: 'pageMedia' })
+    .catch(() => null)) as PageMedia | null
+
   const jsonLd = [
     serviceJsonLd({ path: PATH, name: 'Le Rituel Sailscents', description: DESCRIPTION }),
     faqPageJsonLd(FAQ),
@@ -144,9 +156,7 @@ export default function RituelPage() {
                 <p>{moment.lead}</p>
                 <p>{moment.body}</p>
               </div>
-              <figure className="editorial-figure" data-label="Photo à venir">
-                <figcaption>{moment.caption}</figcaption>
-              </figure>
+              <EditorialFigure media={media?.rituel?.[moment.imageKey]} caption={moment.caption} />
             </div>
           </section>
         ))}
