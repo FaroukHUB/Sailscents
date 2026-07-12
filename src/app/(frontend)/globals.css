@@ -739,3 +739,212 @@ a {
 .journal-card:hover {
   border-color: var(--color-accent);
 }
+
+/* ------------------------------------------------------------------ *
+ * Accueil « une seule image + porte shoji centrale »
+ * (voir ShojiHome.tsx). La scene couvre toute la rangee ; les colonnes
+ * la decoupent ; la porte centrale s'ouvre au clic avant la navigation.
+ * ------------------------------------------------------------------ */
+.shoji-home {
+  position: relative;
+  height: 100%;
+  min-height: 480px;
+  overflow: hidden;
+}
+
+/* La scene : image unique partagee (placeholder chaleureux si absente). */
+.shoji-scene {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 120%, rgba(171, 138, 82, 0.18), transparent 55%),
+    linear-gradient(180deg, #2a2030, #1c1220 70%);
+}
+
+.shoji-scene-img {
+  object-fit: cover;
+  filter: brightness(0.82) saturate(0.95);
+}
+
+/* Voile sombre en bas pour la lisibilite des libelles. */
+.shoji-scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 45%);
+}
+
+/* Les colonnes cliquables (au-dessus de tout, libelles lisibles). */
+.shoji-cols {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Voile sombre derriere les libelles : lisibilite meme par-dessus la
+   porte en papier crème. */
+.shoji-cols::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 55%;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(3, 1, 5, 0.88), rgba(3, 1, 5, 0.55) 40%, transparent);
+  pointer-events: none;
+}
+
+.shoji-col .panel-label {
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.85);
+}
+
+/* Mobile : les bandeaux deviennent un menu vertical propre, en bas. */
+.shoji-col {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1rem;
+  text-align: center;
+  border-top: 1px solid rgba(171, 138, 82, 0.28);
+  transition: background-color 500ms ease;
+}
+
+.shoji-col:first-child {
+  border-top: none;
+}
+
+.shoji-col:hover {
+  background: rgba(171, 138, 82, 0.06);
+}
+
+/* La porte shoji centrale. */
+.shoji-door {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  bottom: auto;
+  transform: translateX(-50%);
+  width: clamp(230px, 62vw, 360px);
+  height: 37%;
+  z-index: 2;
+  overflow: hidden;
+  border: 7px solid #3a2c1b;
+  border-bottom: none;
+  box-shadow:
+    0 0 0 2px rgba(171, 138, 82, 0.35),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Le seuil sombre revele quand la porte s'ouvre. */
+.shoji-threshold {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 100% at 50% 100%, #241a10, #060308 75%);
+}
+
+/* Poutre haute (linteau). */
+.shoji-lintel {
+  position: absolute;
+  top: -7px;
+  left: -14px;
+  right: -14px;
+  height: 16px;
+  background: linear-gradient(180deg, #4a3924, #2e2213);
+  z-index: 4;
+}
+
+/* Les deux battants coulissants, en papier washi + treillis de bois. */
+.shoji-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: #e7ddc7;
+  background-image:
+    repeating-linear-gradient(90deg, #7a6544 0 2px, transparent 2px 25%),
+    repeating-linear-gradient(0deg, #7a6544 0 2px, transparent 2px 11%),
+    radial-gradient(90% 60% at 50% 40%, rgba(255, 250, 235, 0.7), rgba(210, 196, 165, 0.35));
+  box-shadow: inset 0 0 40px rgba(120, 96, 60, 0.25);
+  transition: transform 1200ms cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.shoji-leaf-left {
+  left: 0;
+  border-right: 4px solid #3a2c1b;
+}
+
+.shoji-leaf-right {
+  right: 0;
+  border-left: 4px solid #3a2c1b;
+}
+
+.shoji-home.is-opening .shoji-leaf-left {
+  transform: translateX(-104%);
+}
+
+.shoji-home.is-opening .shoji-leaf-right {
+  transform: translateX(104%);
+}
+
+/* Voile d'entree : recouvre l'ecran juste avant la navigation. */
+.shoji-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: #030105;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.shoji-home.is-opening .shoji-veil {
+  opacity: 1;
+  transition: opacity 650ms ease 750ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shoji-leaf,
+  .shoji-veil {
+    transition: none !important;
+  }
+}
+
+/* Desktop : colonnes pleine hauteur en rangee, porte au sol au centre. */
+@media (min-width: 768px) {
+  .shoji-cols {
+    flex-direction: row;
+    justify-content: stretch;
+  }
+
+  .shoji-cols::after {
+    height: 30%;
+    background: linear-gradient(to top, rgba(3, 1, 5, 0.82), transparent);
+  }
+
+  .shoji-col {
+    flex: 1 1 0%;
+    align-items: flex-end;
+    padding: 0 1rem 2.5rem;
+    border-top: none;
+    border-right: 2px solid rgba(171, 138, 82, 0.55);
+    container-type: inline-size;
+  }
+
+  .shoji-col:first-child {
+    border-top: none;
+  }
+
+  .shoji-col:last-child {
+    border-right: none;
+  }
+
+  .shoji-door {
+    top: auto;
+    bottom: 0;
+    width: clamp(320px, 26vw, 440px);
+    height: 82%;
+  }
+}

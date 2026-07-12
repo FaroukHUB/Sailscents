@@ -100,6 +100,7 @@ export type PageMedia = {
 export type HomepagePanel = { image?: Media | number | null }
 
 export type Homepage = {
+  background?: Media | number | null
   boutiquePanel?: HomepagePanel
   collectionsPanel?: HomepagePanel
   ateliersPanel?: HomepagePanel

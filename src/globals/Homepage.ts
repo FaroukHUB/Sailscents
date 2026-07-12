@@ -17,6 +17,16 @@ export const Homepage: GlobalConfig = {
   },
   access: { read: () => true },
   fields: [
+    {
+      name: 'background',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Image de fond (scène unique, avec la porte)',
+      admin: {
+        description:
+          'Une seule image paysage couvrant toute la rangée de bandeaux. Idéalement une scène japonaise avec la porte au centre.',
+      },
+    },
     panelField('boutiquePanel', 'Bandeau — Boutique'),
     panelField('collectionsPanel', 'Bandeau — Collections'),
     panelField('ateliersPanel', 'Bandeau — Le Rituel'),
