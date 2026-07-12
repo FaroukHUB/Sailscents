@@ -92,9 +92,15 @@ a {
 }
 
 .panel-image {
-  object-fit: cover;
-  filter: grayscale(0.35) brightness(0.85);
+  object-fit: contain;
   transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Fond flou derriere l'image nette : remplit le bandeau, evite tout vide. */
+.panel-image-bg {
+  object-fit: cover;
+  filter: blur(26px) brightness(0.5) saturate(0.85) grayscale(0.2);
+  transform: scale(1.15);
 }
 
 .panel-nav .panel-label {
