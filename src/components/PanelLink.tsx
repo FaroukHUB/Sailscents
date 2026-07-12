@@ -42,28 +42,14 @@ export function PanelLink({ href, tint, title, subtitle, imageUrl, imageAlt }: P
       className={leaving ? 'is-leaving' : undefined}
     >
       {imageUrl && (
-        <>
-          {/* Fond flou : meme image en cover, floutee et assombrie, pour
-              remplir le bandeau sans vide quand la photo ne remplit pas tout. */}
-          <Image
-            src={imageUrl}
-            alt=""
-            fill
-            aria-hidden="true"
-            sizes="(min-width: 768px) 30vw, 100vw"
-            className="panel-image-bg"
-            priority={false}
-          />
-          {/* Image nette entiere (jamais rognee) au premier plan. */}
-          <Image
-            src={imageUrl}
-            alt={imageAlt ?? ''}
-            fill
-            sizes="(min-width: 768px) 30vw, 100vw"
-            className="panel-image"
-            priority={false}
-          />
-        </>
+        <Image
+          src={imageUrl}
+          alt={imageAlt ?? ''}
+          fill
+          sizes="(min-width: 768px) 30vw, 100vw"
+          className="panel-image"
+          priority={false}
+        />
       )}
       <span className="panel-label">
         <span className="panel-title block uppercase">{title}</span>
