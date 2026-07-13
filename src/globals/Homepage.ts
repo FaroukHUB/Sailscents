@@ -21,10 +21,10 @@ export const Homepage: GlobalConfig = {
       name: 'background',
       type: 'upload',
       relationTo: 'media',
-      label: 'Image de fond (scène unique, avec la porte)',
+      label: 'Image de fond (tatami révélé derrière la porte)',
       admin: {
         description:
-          'Une seule image paysage couvrant toute la rangée de bandeaux. Idéalement une scène japonaise avec la porte au centre.',
+          'Une seule image paysage (scène tatami / salon de thé) révélée quand la porte shoji s’ouvre au clic. Pas besoin d’y dessiner de porte : la porte est ajoutée par-dessus.',
       },
     },
     panelField('boutiquePanel', 'Bandeau — Boutique'),

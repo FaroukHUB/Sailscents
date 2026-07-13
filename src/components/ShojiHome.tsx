@@ -35,8 +35,8 @@ export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
     }
 
     setOpening(true)
-    // Doit correspondre a l'ouverture de la porte + montee du voile (voir globals.css).
-    window.setTimeout(() => router.push(href), 1400)
+    // Doit correspondre a l'ouverture des battants + montee du voile (voir globals.css).
+    window.setTimeout(() => router.push(href), 1650)
   }
 
   return (
@@ -69,12 +69,11 @@ export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
         ))}
       </nav>
 
-      {/* La porte shoji centrale : deux battants qui coulissent. */}
-      <div className="shoji-door" aria-hidden="true">
-        <span className="shoji-threshold" />
+      {/* La porte shoji plein ecran : deux battants qui coulissent pour
+          reveler la scene (tatami) derriere. */}
+      <div className="shoji-doors" aria-hidden="true">
         <span className="shoji-leaf shoji-leaf-left" />
         <span className="shoji-leaf shoji-leaf-right" />
-        <span className="shoji-lintel" />
       </div>
 
       {/* Voile d'entree : recouvre l'ecran juste avant la navigation. */}

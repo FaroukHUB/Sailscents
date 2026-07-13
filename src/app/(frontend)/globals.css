@@ -757,8 +757,8 @@ a {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(120% 80% at 50% 120%, rgba(171, 138, 82, 0.18), transparent 55%),
-    linear-gradient(180deg, #2a2030, #1c1220 70%);
+    radial-gradient(90% 55% at 50% 30%, rgba(240, 210, 150, 0.16), transparent 62%),
+    linear-gradient(180deg, #372c21 0%, #4a3c28 52%, #6a5636 100%);
 }
 
 .shoji-scene-img {
@@ -821,73 +821,61 @@ a {
   background: rgba(171, 138, 82, 0.06);
 }
 
-/* La porte shoji centrale. */
-.shoji-door {
-  position: absolute;
-  left: 50%;
-  top: 14%;
-  bottom: auto;
-  transform: translateX(-50%);
-  width: clamp(230px, 62vw, 360px);
-  height: 37%;
-  z-index: 2;
-  overflow: hidden;
-  border: 7px solid #3a2c1b;
-  border-bottom: none;
-  box-shadow:
-    0 0 0 2px rgba(171, 138, 82, 0.35),
-    0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-/* Le seuil sombre revele quand la porte s'ouvre. */
-.shoji-threshold {
+/* La porte shoji plein ecran : deux battants couvrant tout l'ecran, qui
+   coulissent pour reveler la scene (tatami) derriere. */
+.shoji-doors {
   position: absolute;
   inset: 0;
-  background: radial-gradient(120% 100% at 50% 100%, #241a10, #060308 75%);
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-/* Poutre haute (linteau). */
-.shoji-lintel {
+/* Voile sombre en haut : lisibilite du titre par-dessus le papier clair. */
+.shoji-home::before {
+  content: '';
   position: absolute;
-  top: -7px;
-  left: -14px;
-  right: -14px;
-  height: 16px;
-  background: linear-gradient(180deg, #4a3924, #2e2213);
-  z-index: 4;
+  inset: 0 0 auto 0;
+  height: 24%;
+  z-index: 3;
+  background: linear-gradient(to bottom, rgba(3, 1, 5, 0.7), transparent);
+  pointer-events: none;
 }
 
-/* Les deux battants coulissants, en papier washi + treillis de bois. */
+/* Les deux battants coulissants, en papier washi tamise + treillis de bois. */
 .shoji-leaf {
   position: absolute;
   top: 0;
   bottom: 0;
   width: 50%;
-  background-color: #e7ddc7;
+  background-color: #d3c4a0;
   background-image:
-    repeating-linear-gradient(90deg, #7a6544 0 2px, transparent 2px 25%),
-    repeating-linear-gradient(0deg, #7a6544 0 2px, transparent 2px 11%),
-    radial-gradient(90% 60% at 50% 40%, rgba(255, 250, 235, 0.7), rgba(210, 196, 165, 0.35));
-  box-shadow: inset 0 0 40px rgba(120, 96, 60, 0.25);
-  transition: transform 1200ms cubic-bezier(0.7, 0, 0.2, 1);
+    repeating-linear-gradient(90deg, rgba(58, 44, 27, 0.9) 0 2px, transparent 2px 9%),
+    repeating-linear-gradient(0deg, rgba(58, 44, 27, 0.85) 0 2px, transparent 2px 6%),
+    radial-gradient(75% 50% at 50% 44%, rgba(247, 236, 208, 0.9), rgba(120, 98, 62, 0.1) 72%),
+    linear-gradient(180deg, rgba(18, 12, 7, 0.5), rgba(18, 12, 7, 0.12) 32%, rgba(18, 12, 7, 0.2) 68%, rgba(18, 12, 7, 0.62));
+  border-top: 6px solid #3a2c1b;
+  border-bottom: 6px solid #3a2c1b;
+  box-shadow: inset 0 0 180px rgba(16, 10, 5, 0.7);
+  transition: transform 1150ms cubic-bezier(0.7, 0, 0.2, 1);
 }
 
 .shoji-leaf-left {
   left: 0;
-  border-right: 4px solid #3a2c1b;
+  border-right: 5px solid #3a2c1b;
 }
 
 .shoji-leaf-right {
   right: 0;
-  border-left: 4px solid #3a2c1b;
+  border-left: 5px solid #3a2c1b;
 }
 
 .shoji-home.is-opening .shoji-leaf-left {
-  transform: translateX(-104%);
+  transform: translateX(-100%);
 }
 
 .shoji-home.is-opening .shoji-leaf-right {
-  transform: translateX(104%);
+  transform: translateX(100%);
 }
 
 /* Voile d'entree : recouvre l'ecran juste avant la navigation. */
@@ -902,7 +890,7 @@ a {
 
 .shoji-home.is-opening .shoji-veil {
   opacity: 1;
-  transition: opacity 650ms ease 750ms;
+  transition: opacity 500ms ease 1150ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -939,12 +927,5 @@ a {
 
   .shoji-col:last-child {
     border-right: none;
-  }
-
-  .shoji-door {
-    top: auto;
-    bottom: 0;
-    width: clamp(320px, 26vw, 440px);
-    height: 82%;
   }
 }
