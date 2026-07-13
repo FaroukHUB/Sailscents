@@ -890,7 +890,9 @@ a {
 
 .shoji-home.is-opening .shoji-veil {
   opacity: 1;
-  transition: opacity 500ms ease 1150ms;
+  /* Les battants finissent de s'ouvrir vers 1150 ms ; on laisse le tatami
+     bien visible ~1 s avant que le voile monte pour la navigation. */
+  transition: opacity 550ms ease 2200ms;
 }
 
 @media (prefers-reduced-motion: reduce) {

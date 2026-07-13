@@ -35,8 +35,9 @@ export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
     }
 
     setOpening(true)
-    // Doit correspondre a l'ouverture des battants + montee du voile (voir globals.css).
-    window.setTimeout(() => router.push(href), 1650)
+    // Ouverture des battants (~1150 ms) + pause sur le tatami (~1 s) + montee
+    // du voile (voir globals.css). La navigation se fait une fois le voile plein.
+    window.setTimeout(() => router.push(href), 2750)
   }
 
   return (
