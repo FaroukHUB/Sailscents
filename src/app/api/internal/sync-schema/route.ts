@@ -13,7 +13,13 @@ import { getPayloadClient } from '@/lib/payload'
  * ci-dessous plutot que pushDevSchema).
  * A supprimer une fois de vraies migrations Payload en place.
  */
-export const maxDuration = 60
+// Node.js requis (drizzle-kit n'est pas compatible edge) ; on demande le delai
+// maximal (300 s sur les offres Pro, plafonne a 60 s sur Hobby — sans effet
+// negatif). L'operation est idempotente : en cas de timeout a froid, il suffit
+// de relancer, chaque essai ne rejoue que ce qui manque encore.
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const maxDuration = 300
 
 type PostgresAdapterShape = {
   schema: Record<string, unknown>
@@ -30,11 +36,15 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { pushSchema } = await import('drizzle-kit/api')
-    const payload = await getPayloadClient()
+    // Init Payload et import de drizzle-kit en parallele pour reduire le
+    // temps de demarrage a froid (les deux sont lourds).
+    const [{ pushSchema }, payload] = await Promise.all([
+      import('drizzle-kit/api'),
+      getPayloadClient(),
+    ])
     const adapter = payload.db as unknown as PostgresAdapterShape
 
-    const { apply, warnings, hasDataLoss } = await pushSchema(
+    const { apply, warnings, hasDataLoss, statementsToExecute } = await pushSchema(
       adapter.schema,
       adapter.drizzle,
       adapter.schemaName ? [adapter.schemaName] : undefined,
@@ -43,7 +53,12 @@ export async function GET(request: Request) {
     )
     await apply()
 
-    return NextResponse.json({ ok: true, warnings, hasDataLoss })
+    return NextResponse.json({
+      ok: true,
+      applied: statementsToExecute?.length ?? 0,
+      warnings,
+      hasDataLoss,
+    })
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : String(error) },
