@@ -17,7 +17,6 @@ import { Products } from './collections/Products'
 import { Redirects } from './collections/Redirects'
 import { Users } from './collections/Users'
 import { Homepage } from './globals/Homepage'
-import { PageMedia } from './globals/PageMedia'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -43,7 +42,7 @@ export default buildConfig({
     Redirects,
     Orders,
   ],
-  globals: [Homepage, PageMedia],
+  globals: [Homepage],
   editor: lexicalEditor(),
   // Stockage cloud des médias sur Vercel (le système de fichiers y est éphémère).
   // En local, sans BLOB_READ_WRITE_TOKEN, Payload conserve le stockage disque défini sur la collection Media.

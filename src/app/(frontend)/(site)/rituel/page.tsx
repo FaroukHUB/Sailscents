@@ -1,10 +1,8 @@
 import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
-import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { breadcrumbJsonLd, faqPageJsonLd, serviceJsonLd } from '@/lib/structured-data'
-import type { PageMedia } from '@/types/content'
 
 // Page editoriale : contenu redige pour l'indexation et la conversion (le
 // client pourra affiner le texte et fournir les vraies photos ensuite).
@@ -81,12 +79,7 @@ const FAQ = [
 export const generateMetadata = async () =>
   buildMetadata({ fallbackTitle: TITLE, fallbackDescription: DESCRIPTION, path: PATH })
 
-export default async function RituelPage() {
-  const payload = await getPayloadClient()
-  const media = (await payload
-    .findGlobal({ slug: 'pageMedia' })
-    .catch(() => null)) as PageMedia | null
-
+export default function RituelPage() {
   const jsonLd = [
     serviceJsonLd({ path: PATH, name: 'Le Rituel Sailscents', description: DESCRIPTION }),
     faqPageJsonLd(FAQ),
@@ -156,7 +149,7 @@ export default async function RituelPage() {
                 <p>{moment.lead}</p>
                 <p>{moment.body}</p>
               </div>
-              <EditorialFigure media={media?.rituel?.[moment.imageKey]} caption={moment.caption} />
+              <EditorialFigure caption={moment.caption} />
             </div>
           </section>
         ))}

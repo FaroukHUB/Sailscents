@@ -18,7 +18,10 @@ export default async function HomePage() {
   const payload = await getPayloadClient()
   const homepage = (await payload.findGlobal({ slug: 'homepage' }).catch(() => null)) as Homepage | null
 
-  const bg = homepage?.background
+  // On reutilise un champ image DEJA present en base (ancien bandeau Boutique),
+  // ce qui evite toute synchro de schema : le client uploade la scene tatami
+  // dans ce champ, relabellise « Image de fond » dans l'admin.
+  const bg = homepage?.boutiquePanel?.image
   const media = bg && typeof bg === 'object' ? (bg as Media) : null
 
   return (

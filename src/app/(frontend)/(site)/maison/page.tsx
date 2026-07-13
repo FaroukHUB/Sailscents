@@ -1,10 +1,8 @@
 import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
-import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
-import type { PageMedia } from '@/types/content'
 
 // Page editoriale : contenu redige pour l'indexation et la conversion (le
 // client pourra affiner le texte et fournir les vraies photos ensuite).
@@ -41,12 +39,7 @@ const FAQ = [
 export const generateMetadata = async () =>
   buildMetadata({ fallbackTitle: TITLE, fallbackDescription: DESCRIPTION, path: PATH })
 
-export default async function MaisonPage() {
-  const payload = await getPayloadClient()
-  const media = (await payload
-    .findGlobal({ slug: 'pageMedia' })
-    .catch(() => null)) as PageMedia | null
-
+export default function MaisonPage() {
   const jsonLd = [
     webPageJsonLd({ path: PATH, name: 'La Maison', description: DESCRIPTION, type: 'AboutPage' }),
     faqPageJsonLd(FAQ),
@@ -145,7 +138,7 @@ export default async function MaisonPage() {
                 </li>
               </ul>
             </div>
-            <EditorialFigure media={media?.maison?.matieres} caption="Bois de Oud & flacons d’Attars" />
+            <EditorialFigure caption="Bois de Oud & flacons d’Attars" />
           </div>
         </section>
 
@@ -167,7 +160,7 @@ export default async function MaisonPage() {
                 le proposer — et c’est précisément ce qui fait la valeur d’une essence rare.
               </p>
             </div>
-            <EditorialFigure media={media?.maison?.sourcing} caption="La sélection, flacon par flacon" />
+            <EditorialFigure caption="La sélection, flacon par flacon" />
           </div>
         </section>
 

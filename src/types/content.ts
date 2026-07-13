@@ -84,26 +84,10 @@ export type StaticPage = {
   seo?: Seo
 }
 
-export type PageMedia = {
-  rituel?: {
-    accueil?: Media | number | null
-    encens?: Media | number | null
-    degustation?: Media | number | null
-    decouverte?: Media | number | null
-  }
-  maison?: {
-    matieres?: Media | number | null
-    sourcing?: Media | number | null
-  }
-}
-
 export type HomepagePanel = { image?: Media | number | null }
 
 export type Homepage = {
-  background?: Media | number | null
+  // `boutiquePanel` sert desormais d'image de fond (scene tatami) : on reutilise
+  // cette colonne deja presente en base plutot que d'ajouter un champ.
   boutiquePanel?: HomepagePanel
-  collectionsPanel?: HomepagePanel
-  ateliersPanel?: HomepagePanel
-  journalPanel?: HomepagePanel
-  maisonPanel?: HomepagePanel
 }
