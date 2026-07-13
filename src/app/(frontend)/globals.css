@@ -763,6 +763,9 @@ a {
 
 .shoji-scene-img {
   object-fit: cover;
+  /* Ancre le cadrage vers le haut : on revele le haut de la scene (le bas est
+     un peu plus rogne). Passer a `center`/`bottom` pour recadrer autrement. */
+  object-position: top center;
   filter: brightness(0.82) saturate(0.95);
 }
 
