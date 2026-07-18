@@ -56,16 +56,26 @@ export function ShojiHome({ panels }: Props) {
             className={`shoji-col${openingHref === panel.href ? ' is-opening' : ''}`}
             onClick={(e) => enter(e, panel.href)}
           >
-            {/* La scene de la banniere : son image (revelee a l'ouverture). */}
+            {/* La scene de la banniere : son image (revelee a l'ouverture).
+                Fond flou + image entiere (contain) pour dezoomer sans rogner. */}
             <span className="col-scene" aria-hidden="true">
               {panel.imageUrl && (
-                <Image
-                  src={panel.imageUrl}
-                  alt={panel.imageAlt ?? ''}
-                  fill
-                  sizes="(min-width: 768px) 20vw, 100vw"
-                  className="col-scene-img"
-                />
+                <>
+                  <Image
+                    src={panel.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 20vw, 100vw"
+                    className="col-scene-bg"
+                  />
+                  <Image
+                    src={panel.imageUrl}
+                    alt={panel.imageAlt ?? ''}
+                    fill
+                    sizes="(min-width: 768px) 20vw, 100vw"
+                    className="col-scene-img"
+                  />
+                </>
               )}
             </span>
 

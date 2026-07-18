@@ -1,7 +1,7 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
+import { HeroImage } from '@/components/HeroImage'
 import { buildMetadata } from '@/lib/seo'
 import { getSectionImage } from '@/lib/sectionImage'
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
@@ -64,12 +64,7 @@ export default async function MaisonPage() {
       ))}
 
       <header className="editorial-hero">
-        {hero && (
-          <>
-            <Image src={hero.url} alt={hero.alt} fill priority sizes="100vw" className="editorial-hero__img" />
-            <span className="editorial-hero__scrim" aria-hidden="true" />
-          </>
-        )}
+        {hero && <HeroImage url={hero.url} alt={hero.alt} />}
         <div className="editorial-hero__inner">
           <nav className="breadcrumb" aria-label="Fil d’Ariane">
             <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> À propos de nous
