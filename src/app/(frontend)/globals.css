@@ -440,14 +440,15 @@ a {
   object-fit: cover;
   object-position: center;
   z-index: 0;
-  filter: brightness(0.72) saturate(0.95);
+  filter: brightness(0.95) saturate(0.98);
 }
 
+/* Voile tres leger : juste assez en bas pour la lisibilite du titre. */
 .editorial-hero__scrim {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(to top, rgba(3, 1, 5, 0.85), rgba(3, 1, 5, 0.3) 55%, rgba(3, 1, 5, 0.5));
+  background: linear-gradient(to top, rgba(3, 1, 5, 0.6), rgba(3, 1, 5, 0.08) 42%, transparent 68%);
   pointer-events: none;
 }
 
@@ -455,6 +456,8 @@ a {
   position: relative;
   z-index: 1;
   max-width: 46rem;
+  /* Legere ombre : lisibilite du texte sur une image claire, sans reassombrir. */
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.55);
 }
 
 .editorial-hero h1 {
@@ -631,6 +634,12 @@ a {
 
   .editorial-split.is-reversed .editorial-figure {
     order: -1;
+  }
+
+  /* Sur PC le hero est large : on l'agrandit pour moins rogner l'image
+     (le cadre large et court montrait une bande trop fine). */
+  .editorial-hero {
+    min-height: 82vh;
   }
 }
 
