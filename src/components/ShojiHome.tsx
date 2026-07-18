@@ -23,14 +23,18 @@ type Props = {
 export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
   const router = useRouter()
   const [openingHref, setOpeningHref] = useState<string | null>(null)
+  const [fastExit, setFastExit] = useState(false)
 
   const enter = (event: React.MouseEvent, href: string) => {
     event.preventDefault()
-    if (openingHref) return
+    if (openingHref || fastExit) return
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReducedMotion) {
-      router.push(href)
+      // Mouvement reduit : pas de coulissement des battants, juste un fondu
+      // doux vers le noir (l'opacite reste acceptable en reduced-motion).
+      setFastExit(true)
+      window.setTimeout(() => router.push(href), 650)
       return
     }
 
@@ -41,7 +45,7 @@ export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
   }
 
   return (
-    <div className={`shoji-home${openingHref ? ' is-opening' : ''}`}>
+    <div className={`shoji-home${openingHref ? ' is-opening' : ''}${fastExit ? ' is-fast' : ''}`}>
       {/* La scene : une seule image de fond, partagee par toutes les portes. */}
       <div className="shoji-scene" aria-hidden="true">
         {backgroundUrl && (

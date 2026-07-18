@@ -888,9 +888,16 @@ a {
   transition: opacity 550ms ease 2200ms;
 }
 
+/* Repli « mouvement reduit » : un simple fondu vers le noir, sans coulissement. */
+.shoji-home.is-fast .shoji-veil {
+  opacity: 1;
+  transition: opacity 450ms ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .col-leaf,
-  .shoji-veil {
+  /* On neutralise le coulissement des battants, mais on garde le fondu du
+     voile (une transition d'opacite reste acceptable en mouvement reduit). */
+  .col-leaf {
     transition: none !important;
   }
 }
