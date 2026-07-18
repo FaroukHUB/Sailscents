@@ -742,9 +742,9 @@ a {
 
 /* ------------------------------------------------------------------ *
  * Accueil « rangee de portes shoji »
- * (voir ShojiHome.tsx). Une seule scene (tatami) derriere ; 5 bannieres,
- * chacune est une porte shoji (deux battants). Au clic sur une banniere,
- * SA porte s'ouvre et revele le tatami, puis navigation.
+ * (voir ShojiHome.tsx). 5 bannieres, chacune est une porte shoji (deux
+ * battants) avec sa propre image derriere. Au clic sur une banniere, SA
+ * porte s'ouvre et revele son image, puis navigation.
  * ------------------------------------------------------------------ */
 .shoji-home {
   position: relative;
@@ -753,19 +753,20 @@ a {
   overflow: hidden;
 }
 
-/* La scene : image unique partagee (placeholder chaleureux si absente). */
-.shoji-scene {
+/* La scene propre a chaque banniere (image revelee a l'ouverture, ou un
+   placeholder chaleureux si aucune image n'est definie). */
+.col-scene {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background:
     radial-gradient(90% 55% at 50% 30%, rgba(240, 210, 150, 0.16), transparent 62%),
     linear-gradient(180deg, #372c21 0%, #4a3c28 52%, #6a5636 100%);
 }
 
-.shoji-scene-img {
+.col-scene-img {
   object-fit: cover;
-  /* Ancre le cadrage vers le haut : on revele le haut de la scene (le bas est
-     un peu plus rogne). Passer a `center`/`bottom` pour recadrer autrement. */
+  /* Ancre le cadrage vers le haut (le bas est un peu plus rogne). */
   object-position: top center;
   filter: brightness(0.82) saturate(0.95);
 }

@@ -86,8 +86,12 @@ export type StaticPage = {
 
 export type HomepagePanel = { image?: Media | number | null }
 
+// Une image par porte. On reutilise les colonnes historiques (deja en base) ;
+// leur nom ne change pas, seul l'usage (image revelee derriere chaque porte).
 export type Homepage = {
-  // `boutiquePanel` sert desormais d'image de fond (scene tatami) : on reutilise
-  // cette colonne deja presente en base plutot que d'ajouter un champ.
   boutiquePanel?: HomepagePanel
+  collectionsPanel?: HomepagePanel
+  ateliersPanel?: HomepagePanel
+  journalPanel?: HomepagePanel
+  maisonPanel?: HomepagePanel
 }
