@@ -435,6 +435,22 @@ a {
   pointer-events: none;
 }
 
+/* Image de hero (partagee avec la porte de l'accueil). */
+.editorial-hero__img {
+  object-fit: cover;
+  object-position: top center;
+  z-index: 0;
+  filter: brightness(0.6) saturate(0.95);
+}
+
+.editorial-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to top, rgba(3, 1, 5, 0.85), rgba(3, 1, 5, 0.3) 55%, rgba(3, 1, 5, 0.5));
+  pointer-events: none;
+}
+
 .editorial-hero__inner {
   position: relative;
   z-index: 1;

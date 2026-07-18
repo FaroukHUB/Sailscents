@@ -1,7 +1,9 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
 import { buildMetadata } from '@/lib/seo'
+import { getSectionImage } from '@/lib/sectionImage'
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
 
 export const dynamic = 'force-dynamic'
@@ -50,7 +52,9 @@ const FAQ = [
 export const generateMetadata = async () =>
   buildMetadata({ fallbackTitle: TITLE, fallbackDescription: DESCRIPTION, path: PATH })
 
-export default function RaretesPage() {
+export default async function RaretesPage() {
+  const hero = await getSectionImage('ateliersPanel')
+
   const jsonLd = [
     webPageJsonLd({ path: PATH, name: 'Les Raretés', description: DESCRIPTION, type: 'CollectionPage' }),
     faqPageJsonLd(FAQ),
@@ -67,6 +71,12 @@ export default function RaretesPage() {
       ))}
 
       <header className="editorial-hero">
+        {hero && (
+          <>
+            <Image src={hero.url} alt={hero.alt} fill priority sizes="100vw" className="editorial-hero__img" />
+            <span className="editorial-hero__scrim" aria-hidden="true" />
+          </>
+        )}
         <div className="editorial-hero__inner">
           <nav className="breadcrumb" aria-label="Fil d’Ariane">
             <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> Les Raretés

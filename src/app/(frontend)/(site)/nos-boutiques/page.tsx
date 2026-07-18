@@ -1,7 +1,9 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
 import { buildMetadata } from '@/lib/seo'
+import { getSectionImage } from '@/lib/sectionImage'
 import { breadcrumbJsonLd, faqPageJsonLd, serviceJsonLd, webPageJsonLd } from '@/lib/structured-data'
 
 export const dynamic = 'force-dynamic'
@@ -32,7 +34,9 @@ const FAQ = [
 export const generateMetadata = async () =>
   buildMetadata({ fallbackTitle: TITLE, fallbackDescription: DESCRIPTION, path: PATH })
 
-export default function NosBoutiquesPage() {
+export default async function NosBoutiquesPage() {
+  const hero = await getSectionImage('journalPanel')
+
   const jsonLd = [
     webPageJsonLd({ path: PATH, name: 'Nos Boutiques', description: DESCRIPTION }),
     serviceJsonLd({ path: PATH, name: 'Séance privée de découverte Sailscents', description: DESCRIPTION }),
@@ -50,6 +54,12 @@ export default function NosBoutiquesPage() {
       ))}
 
       <header className="editorial-hero">
+        {hero && (
+          <>
+            <Image src={hero.url} alt={hero.alt} fill priority sizes="100vw" className="editorial-hero__img" />
+            <span className="editorial-hero__scrim" aria-hidden="true" />
+          </>
+        )}
         <div className="editorial-hero__inner">
           <nav className="breadcrumb" aria-label="Fil d’Ariane">
             <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> Nos Boutiques
