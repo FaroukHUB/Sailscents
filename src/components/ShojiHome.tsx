@@ -13,20 +13,20 @@ type Props = {
 }
 
 /**
- * Accueil « une seule image + porte shoji centrale ».
+ * Accueil « rangee de portes shoji ».
  *
- * Une scene unique couvre toute la rangee (plus aucun recadrage par bandeau).
- * Cinq colonnes cliquables la decoupent visuellement (liseres dores) en gardant
- * chacune sa categorie. Au clic, la porte shoji centrale s'ouvre (les deux
- * battants coulissent), le seuil s'assombrit, puis on navigue vers la page.
+ * Une scene unique (tatami) couvre toute la rangee. Chaque banniere est une
+ * porte shoji (deux battants) qui garde sa categorie. Au clic sur une banniere,
+ * SA porte s'ouvre (ses deux battants coulissent), la scene se revele derriere,
+ * puis on navigue vers la page.
  */
 export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
   const router = useRouter()
-  const [opening, setOpening] = useState(false)
+  const [openingHref, setOpeningHref] = useState<string | null>(null)
 
   const enter = (event: React.MouseEvent, href: string) => {
     event.preventDefault()
-    if (opening) return
+    if (openingHref) return
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReducedMotion) {
@@ -34,15 +34,15 @@ export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
       return
     }
 
-    setOpening(true)
+    setOpeningHref(href)
     // Ouverture des battants (~1150 ms) + pause sur le tatami (~1 s) + montee
     // du voile (voir globals.css). La navigation se fait une fois le voile plein.
     window.setTimeout(() => router.push(href), 2750)
   }
 
   return (
-    <div className={`shoji-home${opening ? ' is-opening' : ''}`}>
-      {/* La scene : une seule image de fond, partagee par tous les bandeaux. */}
+    <div className={`shoji-home${openingHref ? ' is-opening' : ''}`}>
+      {/* La scene : une seule image de fond, partagee par toutes les portes. */}
       <div className="shoji-scene" aria-hidden="true">
         {backgroundUrl && (
           <Image
@@ -56,10 +56,19 @@ export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
         )}
       </div>
 
-      {/* Les 5 colonnes cliquables, avec libelle et liseres dores. */}
+      {/* Une porte shoji par banniere. */}
       <nav className="shoji-cols" aria-label="Navigation principale">
         {panels.map((panel) => (
-          <a key={panel.href} href={panel.href} className="shoji-col" onClick={(e) => enter(e, panel.href)}>
+          <a
+            key={panel.href}
+            href={panel.href}
+            className={`shoji-col${openingHref === panel.href ? ' is-opening' : ''}`}
+            onClick={(e) => enter(e, panel.href)}
+          >
+            <span className="col-door" aria-hidden="true">
+              <span className="col-leaf col-leaf-left" />
+              <span className="col-leaf col-leaf-right" />
+            </span>
             <span className="panel-label">
               <span className="panel-title block uppercase">{panel.title}</span>
               <span className="panel-subtitle mt-2 block font-[family-name:var(--font-display)] italic text-[color:var(--color-muted)]">
@@ -69,13 +78,6 @@ export function ShojiHome({ panels, backgroundUrl, backgroundAlt }: Props) {
           </a>
         ))}
       </nav>
-
-      {/* La porte shoji plein ecran : deux battants qui coulissent pour
-          reveler la scene (tatami) derriere. */}
-      <div className="shoji-doors" aria-hidden="true">
-        <span className="shoji-leaf shoji-leaf-left" />
-        <span className="shoji-leaf shoji-leaf-right" />
-      </div>
 
       {/* Voile d'entree : recouvre l'ecran juste avant la navigation. */}
       <div className="shoji-veil" aria-hidden="true" />

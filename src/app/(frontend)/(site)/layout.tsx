@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
 
 const NAV_LINKS = [
-  { href: '/boutique', label: 'Boutique' },
-  { href: '/collections', label: 'Collections' },
-  { href: '/rituel', label: 'Le Rituel' },
-  { href: '/journal', label: 'Le Journal' },
-  { href: '/maison', label: 'La Maison' },
+  { href: '/parfums', label: 'Les Parfums' },
+  { href: '/encens', label: 'Les Encens' },
+  { href: '/raretes', label: 'Les Raretés' },
+  { href: '/nos-boutiques', label: 'Nos Boutiques' },
+  { href: '/maison', label: 'À propos' },
 ]
 
 export default function SiteLayout({ children }: Readonly<{ children: React.ReactNode }>) {

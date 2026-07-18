@@ -7,7 +7,19 @@ import type { Article, Category, Product, ProductCollection, StaticPage } from '
 // Rendu dynamique : les donnees viennent de Payload/Postgres, pas de build statique tant que la base n'est pas connectee.
 export const dynamic = 'force-dynamic'
 
-const STATIC_ROUTES = ['/', '/maison', '/rituel', '/boutique', '/collections', '/journal', '/faq']
+const STATIC_ROUTES = [
+  '/',
+  '/parfums',
+  '/encens',
+  '/raretes',
+  '/nos-boutiques',
+  '/maison',
+  '/rituel',
+  '/boutique',
+  '/collections',
+  '/journal',
+  '/faq',
+]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayloadClient()

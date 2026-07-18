@@ -9,7 +9,7 @@ import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured
 export const dynamic = 'force-dynamic'
 
 const PATH = '/maison'
-const TITLE = 'La Maison — parfumerie de niche : Oud, Attars, encens'
+const TITLE = 'À propos de nous — parfumerie de niche : Oud, Attars, encens'
 const DESCRIPTION =
   'Sailscents, maison de parfumerie de niche et de connaisseurs : bois de Oud, Attars (huiles parfumées), encens de la voie du Kōdō, thés et cafés d’exception d’Asie orientale, sélectionnés avec exigence.'
 
@@ -41,11 +41,11 @@ export const generateMetadata = async () =>
 
 export default function MaisonPage() {
   const jsonLd = [
-    webPageJsonLd({ path: PATH, name: 'La Maison', description: DESCRIPTION, type: 'AboutPage' }),
+    webPageJsonLd({ path: PATH, name: 'À propos de nous', description: DESCRIPTION, type: 'AboutPage' }),
     faqPageJsonLd(FAQ),
     breadcrumbJsonLd([
       { name: 'Accueil', path: '/' },
-      { name: 'La Maison', path: PATH },
+      { name: 'À propos de nous', path: PATH },
     ]),
   ]
 
@@ -62,10 +62,10 @@ export default function MaisonPage() {
       <header className="editorial-hero">
         <div className="editorial-hero__inner">
           <nav className="breadcrumb" aria-label="Fil d’Ariane">
-            <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> La Maison
+            <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> À propos de nous
           </nav>
           <p className="kicker mt-6">Maison sensorielle de connaisseurs</p>
-          <h1 className="mt-3">La Maison</h1>
+          <h1 className="mt-3">À propos de nous</h1>
           <p className="editorial-lede">
             Sailscents est une maison de parfumerie de niche dédiée aux matières les plus rares —
             bois de Oud, Attars, encens de la voie du Kōdō, thés et cafés d’exception. Nous ne
