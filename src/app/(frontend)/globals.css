@@ -435,20 +435,12 @@ a {
   pointer-events: none;
 }
 
-/* Image de hero (partagee avec la porte de l'accueil).
-   Fond flou en cover + image entiere en contain : dezoome, sans bande vide. */
-.editorial-hero__bg {
-  object-fit: cover;
-  z-index: 0;
-  filter: blur(28px) brightness(0.4) saturate(0.9);
-  transform: scale(1.15);
-}
-
+/* Image de hero (partagee avec la porte de l'accueil) : remplit tout le cadre. */
 .editorial-hero__img {
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   z-index: 0;
-  filter: brightness(0.9) saturate(0.95);
+  filter: brightness(0.72) saturate(0.95);
 }
 
 .editorial-hero__scrim {
@@ -788,18 +780,11 @@ a {
     linear-gradient(180deg, #372c21 0%, #4a3c28 52%, #6a5636 100%);
 }
 
-/* Fond flou en cover derriere l'image nette : remplit la colonne sans vide. */
-.col-scene-bg {
-  object-fit: cover;
-  filter: blur(20px) brightness(0.45) saturate(0.9);
-  transform: scale(1.15);
-}
-
-/* Image entiere (contain) : dezoomee, rien de rogne. */
+/* Image de la banniere : remplit toute la colonne. */
 .col-scene-img {
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
-  filter: brightness(0.85) saturate(0.95);
+  filter: brightness(0.82) saturate(0.95);
 }
 
 /* Voile sombre en haut : lisibilite du titre par-dessus le papier clair. */
