@@ -871,6 +871,30 @@ a {
   border-left: 4px solid #3a2c1b;
 }
 
+/* Hikite : la poignee encastree en laiton de chaque battant, pres du bord
+   central — rend les portes lisibles face aux simples separations. */
+.col-leaf::after {
+  content: '';
+  position: absolute;
+  top: 44%;
+  width: 0.85rem;
+  height: 2.1rem;
+  border-radius: 0.45rem;
+  background: linear-gradient(180deg, #d9bd7d, #9a7736 55%, #6f521f);
+  box-shadow:
+    inset 0 0 6px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 242, 205, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.col-leaf-left::after {
+  right: 14%;
+}
+
+.col-leaf-right::after {
+  left: 14%;
+}
+
 /* Seule la porte cliquee s'ouvre. */
 .shoji-col.is-opening .col-leaf-left {
   transform: translateX(-100%);
