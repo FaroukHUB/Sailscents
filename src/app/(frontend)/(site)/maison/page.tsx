@@ -63,7 +63,10 @@ export default async function MaisonPage() {
         />
       ))}
 
-      <header className="editorial-hero">
+      <header
+        className="editorial-hero"
+        style={hero?.width && hero?.height ? { aspectRatio: `${hero.width} / ${hero.height}` } : undefined}
+      >
         {hero && <HeroImage url={hero.url} alt={hero.alt} />}
         <div className="editorial-hero__inner">
           <nav className="breadcrumb" aria-label="Fil d’Ariane">

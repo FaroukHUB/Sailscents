@@ -9,13 +9,20 @@ import type { Homepage, HomepagePanel, Media } from '@/types/content'
  */
 export type SectionKey = keyof Homepage
 
-export async function getSectionImage(
-  key: SectionKey,
-): Promise<{ url: string; alt: string } | null> {
+export type SectionImage = {
+  url: string
+  alt: string
+  width?: number | null
+  height?: number | null
+}
+
+export async function getSectionImage(key: SectionKey): Promise<SectionImage | null> {
   const payload = await getPayloadClient()
   const homepage = (await payload.findGlobal({ slug: 'homepage' }).catch(() => null)) as Homepage | null
   const group = homepage?.[key] as HomepagePanel | undefined
   const image = group?.image
   const media = image && typeof image === 'object' ? (image as Media) : null
-  return media?.url ? { url: media.url, alt: media.alt ?? '' } : null
+  return media?.url
+    ? { url: media.url, alt: media.alt ?? '', width: media.width, height: media.height }
+    : null
 }

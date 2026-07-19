@@ -407,11 +407,15 @@ a {
   color: var(--color-accent);
 }
 
-/* Hero editorial : bandeau plein cadre, fumee qui monte sur fond violet. */
+/* Hero editorial : bandeau plein cadre, fumee qui monte sur fond violet.
+   Quand une image est presente, le hero prend son ratio (aspect-ratio en
+   inline) : `cover` remplit alors sans rien rogner. min/max-height protegent
+   le texte (mobile) et evitent un hero geant (image portrait). */
 .editorial-hero {
   position: relative;
   overflow: hidden;
   min-height: 56vh;
+  max-height: 92vh;
   display: flex;
   align-items: flex-end;
   padding: clamp(2rem, 6vw, 5rem);
@@ -634,12 +638,6 @@ a {
 
   .editorial-split.is-reversed .editorial-figure {
     order: -1;
-  }
-
-  /* Sur PC le hero est large : on l'agrandit pour moins rogner l'image
-     (le cadre large et court montrait une bande trop fine). */
-  .editorial-hero {
-    min-height: 82vh;
   }
 }
 
