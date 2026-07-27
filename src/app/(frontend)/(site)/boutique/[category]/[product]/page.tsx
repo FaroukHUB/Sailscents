@@ -1,10 +1,13 @@
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { ProductBuyBox } from '@/components/cart/ProductBuyBox'
 import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import type { Category, Media, Product } from '@/types/content'
 
-// Rendu dynamique : les donnees viennent de Payload/Postgres, pas de build statique tant que la base n'est pas connectee.
 export const dynamic = 'force-dynamic'
 
 type Args = { params: Promise<{ category: string; product: string }> }
@@ -20,11 +23,13 @@ const getProduct = async (slug: string) => {
   return (docs[0] as Product) ?? null
 }
 
+const mediaUrl = (m: Media | number | null | undefined): string | undefined =>
+  m && typeof m === 'object' ? (m.url ?? undefined) : undefined
+
 export const generateMetadata = async ({ params }: Args) => {
   const { category, product: slug } = await params
   const product = await getProduct(slug)
   if (!product) return {}
-
   return buildMetadata({
     seo: product.seo,
     fallbackTitle: product.name,
@@ -39,12 +44,18 @@ export default async function ProductPage({ params }: Args) {
   const product = await getProduct(slug)
   if (!product) notFound()
 
-  const categoryName = typeof product.category === 'object' ? (product.category as Category).name : ''
-  const lowestPrice = product.variants?.length
-    ? Math.min(...product.variants.map((variant) => variant.price))
-    : undefined
-  const mainImageUrl =
-    product.mainImage && typeof product.mainImage === 'object' ? (product.mainImage as Media).url : undefined
+  const category = typeof product.category === 'object' ? (product.category as Category) : null
+  const categoryName = category?.name ?? ''
+  const mainImageUrl = mediaUrl(product.mainImage)
+  const variants = product.variants ?? []
+  const lowestPrice = variants.length ? Math.min(...variants.map((v) => v.price)) : undefined
+
+  const notes = product.olfactiveNotes
+  const noteRows = [
+    { label: 'Tête', value: notes?.top },
+    { label: 'Cœur', value: notes?.heart },
+    { label: 'Fond', value: notes?.base },
+  ].filter((n) => n.value)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -53,45 +64,103 @@ export default async function ProductPage({ params }: Args) {
     description: product.shortDescription ?? undefined,
     category: categoryName,
     image: mainImageUrl ?? undefined,
-    offers: product.variants?.map((variant) => ({
+    offers: variants.map((v) => ({
       '@type': 'Offer',
-      name: variant.label,
-      price: variant.price,
+      name: v.label,
+      price: v.price,
       priceCurrency: 'EUR',
-      availability:
-        variant.stock && variant.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      availability: v.stock && v.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
     })),
   }
 
   return (
-    <section className="mx-auto max-w-4xl px-6 py-20">
+    <article className="mx-auto max-w-6xl px-6 py-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <p className="text-xs tracking-[0.3em] text-[color:var(--color-accent)] uppercase">{categoryName}</p>
-      <h1 className="mt-2 text-4xl">{product.name}</h1>
-      {product.shortDescription && (
-        <p className="mt-4 max-w-2xl text-[color:var(--color-muted)]">{product.shortDescription}</p>
-      )}
+      <nav className="breadcrumb" aria-label="Fil d’Ariane">
+        <Link href="/parfums">Boutique</Link> <span aria-hidden="true">·</span>{' '}
+        <Link href={`/boutique/${categorySlug}`}>{categoryName}</Link> <span aria-hidden="true">·</span>{' '}
+        {product.name}
+      </nav>
 
-      {lowestPrice !== undefined && <p className="mt-6 text-2xl">à partir de {lowestPrice} €</p>}
+      <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-2">
+        {/* Visuel */}
+        <div className="product-media">
+          {mainImageUrl ? (
+            <Image
+              src={mainImageUrl}
+              alt={product.name}
+              width={900}
+              height={1100}
+              className="product-media-img"
+              priority
+            />
+          ) : (
+            <div className="product-media-placeholder" aria-hidden="true" />
+          )}
+        </div>
 
-      {product.variants && product.variants.length > 0 && (
-        <ul className="mt-8 flex flex-col gap-3">
-          {product.variants.map((variant) => (
-            <li
-              key={variant.label}
-              className="flex items-center justify-between border border-[color:var(--color-border)] px-4 py-3"
-            >
-              <span>{variant.label}</span>
-              <span>{variant.price} €</span>
-            </li>
-          ))}
-        </ul>
-      )}
+        {/* Achat + résumé */}
+        <div>
+          {categoryName && (
+            <p className="kicker">{categoryName}{product.origin?.country ? ` · ${product.origin.country}` : ''}</p>
+          )}
+          <h1 className="mt-3 text-4xl">{product.name}</h1>
+          {product.shortDescription && (
+            <p className="mt-4 text-[color:var(--color-muted)]">{product.shortDescription}</p>
+          )}
 
-      <p className="mt-12 text-sm text-[color:var(--color-muted)]">
-        Univers : <span className="text-[color:var(--foreground)]">{categorySlug}</span>
-      </p>
-    </section>
+          {variants.length > 0 ? (
+            <div className="mt-8">
+              <ProductBuyBox
+                productId={product.id}
+                productSlug={product.slug}
+                productName={product.name}
+                imageUrl={mainImageUrl}
+                variants={variants}
+              />
+            </div>
+          ) : (
+            lowestPrice !== undefined && <p className="mt-8 text-2xl">à partir de {lowestPrice} €</p>
+          )}
+
+          {(product.origin?.country || product.origin?.method) && (
+            <dl className="product-facts">
+              {product.origin?.country && (
+                <div>
+                  <dt>Origine</dt>
+                  <dd>{product.origin.country}</dd>
+                </div>
+              )}
+              {product.origin?.method && (
+                <div>
+                  <dt>Méthode</dt>
+                  <dd>{product.origin.method}</dd>
+                </div>
+              )}
+            </dl>
+          )}
+
+          {noteRows.length > 0 && (
+            <dl className="product-facts">
+              {noteRows.map((n) => (
+                <div key={n.label}>
+                  <dt>{n.label}</dt>
+                  <dd>{n.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      </div>
+
+      {/* Description longue (la voix du client) */}
+      {product.description ? (
+        <section className="product-description prose prose-invert mt-16 max-w-3xl">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <RichText data={product.description as any} />
+        </section>
+      ) : null}
+    </article>
   )
 }

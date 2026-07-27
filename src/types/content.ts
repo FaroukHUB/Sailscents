@@ -45,7 +45,10 @@ export type Product = {
   category: Category | number
   shortDescription?: string | null
   description?: unknown
+  olfactiveNotes?: { top?: string | null; heart?: string | null; base?: string | null } | null
+  origin?: { country?: string | null; method?: string | null } | null
   mainImage?: Media | number | null
+  gallery?: { image: Media | number }[] | null
   variants?: ProductVariant[]
   seo?: Seo
 }

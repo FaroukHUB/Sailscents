@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { CartLink } from '@/components/cart/CartLink'
+import { CartProvider } from '@/components/cart/CartProvider'
 import { SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
 
 const NAV_LINKS = [
@@ -12,7 +14,7 @@ const NAV_LINKS = [
 
 export default function SiteLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <>
+    <CartProvider>
       <header className="border-b border-[color:var(--color-border)]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
           <Link href="/" className="font-[family-name:var(--font-display)] text-xl tracking-[0.2em] uppercase">
@@ -25,9 +27,7 @@ export default function SiteLayout({ children }: Readonly<{ children: React.Reac
               </Link>
             ))}
           </nav>
-          <Link href="/panier" className="text-sm tracking-wide uppercase opacity-80 hover:opacity-100">
-            Panier
-          </Link>
+          <CartLink />
         </div>
       </header>
 
@@ -49,6 +49,6 @@ export default function SiteLayout({ children }: Readonly<{ children: React.Reac
           <p className="mt-6 opacity-60">© {new Date().getFullYear()} {SITE_NAME}. Tous droits réservés.</p>
         </div>
       </footer>
-    </>
+    </CartProvider>
   )
 }
