@@ -120,6 +120,49 @@ export const SEED_PRODUCTS: SeedProduct[] = [
     ],
   },
   {
+    name: 'Oud Silani',
+    slug: 'oud-silani',
+    categorySlug: 'les-ouds',
+    originCountry: 'Sri Lanka',
+    originMethod: 'Distillation (Aquilaria)',
+    shortDescription:
+      'Oud du Sri Lanka : très aromatique et puissant, épices sèches et note marine — profondément addictif.',
+    notesHeart: 'Épices sèches, note marine (écume, rochers), bois d’Aquilaria, encens',
+    description: [
+      'Le oud silani tire son nom de « Silan », l’autre nom du Sri Lanka en arabe.',
+      'Une huile très aromatique et puissante : des notes d’épices sèches et une facette marine — l’odeur de rochers baignés d’écume — irrésistiblement addictive. Vient ensuite le cœur boisé de l’Aquilaria, cette odeur d’encens que l’on connaît par sa fumée.',
+      'Un oud fin et profondément addictif, l’un des meilleurs Sri-Lankais que j’aie connus jusqu’à maintenant. Petit batch disponible actuellement : à acheter sans modération, et à savourer occasionnellement.',
+    ],
+  },
+  {
+    name: 'Rose Azerbaïdjan 1972',
+    slug: 'rose-azerbaidjan-1972',
+    categorySlug: 'les-roses',
+    originCountry: 'Azerbaïdjan',
+    originMethod: 'Rosa Damascena — macération vintage (1972)',
+    shortDescription:
+      'Une rose vintage de collection (1972) : le fruité frais viré au capiteux, spiritueux sucré et fûts de bois.',
+    notesHeart: 'Agrumes, fruits rouges liquoreux, alcool spiritueux sucré, fûts de bois',
+    description: [
+      'Une rose vintage de collection. Avec l’âge, ses notes d’agrumes, fruitées et fraîches ont viré vers le capiteux : un alcool spiritueux sucré qui rappelle les fûts de bois où l’on conserve le whisky.',
+      'On y retrouve aujourd’hui des notes de fruits rouges liquoreuses. L’âge de la macération est le facteur de cette transformation. Une rose de collection incroyable.',
+    ],
+  },
+  {
+    name: 'Rose Indienne',
+    slug: 'rose-indienne',
+    categorySlug: 'les-roses',
+    originCountry: 'Inde',
+    originMethod: 'Rosa Damascena (distillation tige incluse)',
+    shortDescription:
+      'Rose indienne Damascena : l’une des plus puissantes qui soit — agrumes fruités et amers, notes vertes de tige.',
+    notesHeart: 'Agrumes fruités, amertume, notes vertes de tiges coupées, chaleur',
+    description: [
+      'Une rose très puissante — l’une des plus puissantes que j’aie eues dans ma vie. Une odeur d’agrumes fruités et amers à la fois, avec des notes vertes de tiges coupées : à croire qu’on a distillé la tige avec.',
+      'Elle reste puissante sur les vêtements ; cette rose indienne chaude sort du lot. Une rose d’un autre monde — il faut la sentir pour le croire. Les passionnés de roses puissantes en seront ravis, à coup sûr.',
+    ],
+  },
+  {
     name: 'Mukhalat Wahir',
     slug: 'mukhalat-wahir',
     categorySlug: 'les-mukhalat',
