@@ -16,7 +16,13 @@ export const maxDuration = 60
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  if (searchParams.get('secret') !== process.env.PAYLOAD_SECRET) {
+  // Comparaison tolerante : on ignore les espaces/retours de fin (fréquents dans
+  // les variables d'env) et le cas ou un « + » du secret a ete decode en espace
+  // par l'URL.
+  const provided = (searchParams.get('secret') ?? '').trim()
+  const expected = (process.env.PAYLOAD_SECRET ?? '').trim()
+  const matches = provided === expected || provided.replace(/ /g, '+') === expected
+  if (!expected || !matches) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
