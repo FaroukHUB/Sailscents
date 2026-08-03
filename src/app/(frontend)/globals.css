@@ -646,36 +646,35 @@ a {
   position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border: 1px solid rgba(171, 138, 82, 0.28);
-  background:
-    radial-gradient(90% 70% at 30% 20%, rgba(120, 100, 140, 0.35), transparent 60%),
-    radial-gradient(70% 60% at 80% 90%, rgba(171, 138, 82, 0.22), transparent 55%),
-    linear-gradient(160deg, var(--color-background-elevated), var(--background));
+  border: 1px solid rgba(171, 138, 82, 0.22);
+  background: linear-gradient(165deg, #241a2a, #150f1b 82%);
 }
 
-.editorial-figure::after {
-  content: attr(data-label);
+/* Ensō (cercle zen tracé au pinceau) : motif japonais épuré sur les
+   emplacements encore sans photo. */
+.editorial-figure:not(.has-image)::before {
+  content: '';
   position: absolute;
-  inset: auto 0 1rem 0;
-  text-align: center;
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(244, 237, 227, 0.45);
+  left: 50%;
+  top: 42%;
+  width: min(46%, 9rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid rgba(171, 138, 82, 0.5);
+  border-radius: 50%;
+  -webkit-mask: conic-gradient(from 205deg, #000 0 302deg, transparent 302deg);
+  mask: conic-gradient(from 205deg, #000 0 302deg, transparent 302deg);
 }
 
 .editorial-figure figcaption {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+  inset: auto 0 1.25rem 0;
   text-align: center;
+  padding: 0 1.25rem;
   font-family: var(--font-display), serif;
   font-style: italic;
-  font-size: 1.1rem;
-  color: rgba(244, 237, 227, 0.7);
+  font-size: 1rem;
+  color: rgba(244, 237, 227, 0.6);
 }
 
 /* Variante avec une vraie photo : l'image remplit le cadre, la legende

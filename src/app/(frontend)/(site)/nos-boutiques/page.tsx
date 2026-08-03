@@ -9,25 +9,35 @@ import { breadcrumbJsonLd, faqPageJsonLd, serviceJsonLd, webPageJsonLd } from '@
 export const dynamic = 'force-dynamic'
 
 const PATH = '/nos-boutiques'
-const TITLE = 'Nos Boutiques — nous rencontrer & vivre l’expérience'
+const TITLE = 'Nos Boutiques — acheter en personne, sur rendez-vous'
 const DESCRIPTION =
-  'Nous vous recevons sur rendez-vous, sur le tatami, autour de l’encensoir : une séance privée de découverte de nos parfums rares, accompagnée d’un thé ou d’un café d’exception. Sans frais.'
+  'Découvrez et achetez nos parfums rares en personne : bois de Oud, Attars, roses de collection, mukhalat. Une boutique confidentielle, sur rendez-vous, où un connaisseur vous reçoit, vous conseille et vous fait tester chaque essence.'
 
 const FAQ = [
   {
-    question: 'Comment vous rencontrer ?',
+    question: 'Peut-on acheter directement en boutique ?',
     answer:
-      'Sur rendez-vous, afin de vous recevoir en toute intimité. Contactez-nous pour convenir d’un créneau : nous confirmons ensemble la date et l’heure de votre séance.',
+      'Oui. Au-delà de la vente en ligne, nous vous recevons en personne pour découvrir, sentir et acheter nos parfums. C’est le meilleur moyen de choisir une essence rare : sur la peau, comparée, expliquée par un connaisseur.',
   },
   {
-    question: 'La rencontre est-elle payante ?',
+    question: 'Où se trouve votre boutique ?',
     answer:
-      'Non, la séance est offerte et sans engagement. Notre objectif est de vous faire vivre une expérience et de vous laisser choisir en connaissance de cause. Vous êtes libre de repartir sans achat.',
+      'Nous recevons sur rendez-vous, en privé. L’adresse exacte et les créneaux disponibles vous sont communiqués à la confirmation de votre rendez-vous — une manière de préserver l’intimité et la qualité de l’accueil.',
   },
   {
-    question: 'Que se passe-t-il pendant la séance ?',
+    question: 'Comment prendre rendez-vous ?',
     answer:
-      'Reçu sur le tatami, autour de l’encensoir, vous découvrez nos parfums rares — bois de Oud, Attars — accompagnés d’un thé ou d’un café d’exception. Chaque matière est présentée, comparée et expliquée.',
+      'Contactez-nous via la page Contact. Nous convenons ensemble d’un créneau, puis nous vous transmettons l’adresse et les modalités pratiques.',
+  },
+  {
+    question: 'Faut-il acheter pour venir ?',
+    answer:
+      'Non. La visite est sans engagement : vous pouvez venir découvrir, sentir et comprendre nos matières, et repartir sans achat. Notre objectif est la rencontre avec l’odeur juste, pas la vente à tout prix.',
+  },
+  {
+    question: 'Puis-je essayer les parfums avant d’acheter ?',
+    answer:
+      'Absolument — c’est tout l’intérêt de la boutique. On teste sur la peau, on laisse évoluer, on compare plusieurs essences, et l’on choisit en connaissance de cause.',
   },
 ]
 
@@ -39,7 +49,7 @@ export default async function NosBoutiquesPage() {
 
   const jsonLd = [
     webPageJsonLd({ path: PATH, name: 'Nos Boutiques', description: DESCRIPTION }),
-    serviceJsonLd({ path: PATH, name: 'Séance privée de découverte Sailscents', description: DESCRIPTION }),
+    serviceJsonLd({ path: PATH, name: 'Boutique privée Sailscents (sur rendez-vous)', description: DESCRIPTION }),
     faqPageJsonLd(FAQ),
     breadcrumbJsonLd([
       { name: 'Accueil', path: '/' },
@@ -62,43 +72,115 @@ export default async function NosBoutiquesPage() {
           <nav className="breadcrumb" aria-label="Fil d’Ariane">
             <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> Nos Boutiques
           </nav>
-          <p className="kicker mt-6">Nous rencontrer</p>
+          <p className="kicker mt-6">Boutique confidentielle</p>
           <h1 className="mt-3">Nos Boutiques</h1>
           <p className="editorial-lede">
-            Nous vous recevons sur rendez-vous, sur le tatami, autour de l’encensoir : un moment hors
-            du temps pour découvrir nos parfums les plus rares, un thé ou un café d’exception à la main.
+            Nos parfums les plus rares se vivent aussi en personne. Nous vous recevons sur
+            rendez-vous, en privé, pour sentir, comparer et choisir — accompagné par un connaisseur,
+            un thé ou un café d’exception à la main.
           </p>
         </div>
       </header>
 
       <div className="editorial-body">
-        <section className="editorial-section" aria-labelledby="experience">
-          <div className="editorial-split">
-            <div className="editorial-prose">
-              <p className="kicker">L’expérience</p>
-              <h2 id="experience" className="mt-3">Reçu comme un hôte</h2>
-              <p>
-                On vous installe, on ralentit. L’encensoir diffuse sa fumée parfumante, un thé ou un
-                café rare d’Asie orientale accompagne la découverte, et l’on prend le temps de sentir,
-                comparer et comprendre chaque essence.
-              </p>
-              <p>
-                Ce n’est pas une vente : c’est une rencontre. Vous repartez avec une connaissance —
-                et parfois avec l’essence qui vous ressemble.
-              </p>
+        <section className="editorial-section" aria-labelledby="en-personne">
+          <p className="kicker">Acheter en personne</p>
+          <h2 id="en-personne" className="mt-3">Ce qu’un écran ne remplacera jamais</h2>
+          <div className="editorial-prose">
+            <p>
+              Un bois de Oud, un Attar, une rose de collection ne se choisissent pas sur une photo.
+              Ces matières vivent sur la peau : elles se réchauffent, évoluent, révèlent au fil des
+              heures des facettes qu’aucune description ne peut restituer. C’est pourquoi, en plus de
+              la vente en ligne, nous vous recevons en boutique pour acheter <strong>en connaissance
+              de cause</strong>.
+            </p>
+            <p>
+              Sur place, vous ne faites pas qu’acheter un flacon : vous êtes conseillé par un
+              connaisseur qui vous explique l’origine, la méthode de distillation, la signature de
+              chaque essence. Vous sentez, vous comparez, vous prenez le temps. C’est la différence
+              entre acquérir un parfum et le comprendre.
+            </p>
+          </div>
+
+          <div className="trust-row">
+            <div className="trust-item">
+              <h3>Conseil d’expert</h3>
+              <p>Un accompagnement par un connaisseur, sans jargon ni précipitation.</p>
             </div>
-            <EditorialFigure caption="Reçu sur le tatami" />
+            <div className="trust-item">
+              <h3>Essayer avant d’acheter</h3>
+              <p>Tester sur la peau, laisser évoluer, comparer plusieurs essences.</p>
+            </div>
+            <div className="trust-item">
+              <h3>Authenticité garantie</h3>
+              <p>Chaque flacon présenté, testé et expliqué — des matières rares et tracées.</p>
+            </div>
           </div>
         </section>
 
-        <section className="editorial-section" aria-labelledby="infos">
-          <p className="kicker">En pratique</p>
-          <h2 id="infos" className="mt-3">Uniquement sur rendez-vous</h2>
+        <section className="editorial-section" aria-labelledby="confidentielle">
+          <div className="editorial-split">
+            <div className="editorial-prose">
+              <p className="kicker">Sur rendez-vous</p>
+              <h2 id="confidentielle" className="mt-3">Une boutique confidentielle</h2>
+              <p>
+                À l’image des grandes maisons de parfumerie de niche, nous recevons <strong>sur
+                rendez-vous</strong>, en toute intimité. Ce choix n’est pas une contrainte : c’est
+                une manière de préserver la qualité de l’accueil et l’attention que méritent des
+                matières aussi rares.
+              </p>
+              <p>
+                Pas de foule, pas de précipitation : un moment qui vous est entièrement consacré.
+                L’adresse et les créneaux vous sont communiqués à la confirmation de votre
+                rendez-vous.
+              </p>
+            </div>
+            <EditorialFigure caption="L’accueil, en toute intimité" />
+          </div>
+        </section>
+
+        <section className="editorial-section" aria-labelledby="experience">
+          <div className="editorial-split is-reversed">
+            <div className="editorial-prose">
+              <p className="kicker">L’expérience</p>
+              <h2 id="experience" className="mt-3">Reçu comme un hôte, sur le tatami</h2>
+              <p>
+                On vous installe, on ralentit. L’encensoir diffuse sa fumée parfumante, un thé ou un
+                café rare d’Asie orientale accompagne la découverte, et l’on prend le temps de sentir
+                et de comprendre chaque essence — du palais au nez.
+              </p>
+              <p>
+                Ce n’est pas une simple visite en magasin : c’est une rencontre autour du parfum, dans
+                l’esprit de la voie du Kōdō.
+              </p>
+            </div>
+            <EditorialFigure caption="Autour de l’encensoir" />
+          </div>
+        </section>
+
+        <section className="editorial-section" aria-labelledby="trouver">
+          <p className="kicker">En boutique</p>
+          <h2 id="trouver" className="mt-3">Ce que vous pouvez découvrir sur place</h2>
           <div className="editorial-prose">
             <p>
-              Pour préserver l’intimité et la qualité de l’accueil, nous recevons exclusivement sur
-              rendez-vous. Écrivez-nous pour convenir d’un moment : nous confirmons ensemble la date
-              et l’heure de votre séance.
+              L’ensemble de notre sélection se découvre en personne — souvent mieux qu’en ligne,
+              parce qu’on peut tout sentir et comparer :
+            </p>
+            <ul>
+              <li>
+                <strong>Les huiles de Oud</strong>, par origine et par style — Vietnam, Bornéo, Assam,
+                Indonésie, Sri Lanka…
+              </li>
+              <li>
+                <strong>Les roses</strong> de collection — Taïf, Cachemire, et des raretés vintage.
+              </li>
+              <li>
+                <strong>Les mukhalat</strong>, nos compositions signature.
+              </li>
+            </ul>
+            <p>
+              Un connaisseur vous guide selon vos goûts, et vous repartez avec l’essence qui vous
+              ressemble — ou simplement avec une connaissance nouvelle.
             </p>
           </div>
         </section>
@@ -118,13 +200,14 @@ export default async function NosBoutiquesPage() {
 
         <section className="appointment" aria-labelledby="rdv">
           <p className="kicker">Sur rendez-vous</p>
-          <h2 id="rdv" className="mt-3">Prendre rendez-vous</h2>
+          <h2 id="rdv" className="mt-3">Nous rendre visite</h2>
           <p>
-            Une séance privée, offerte et sans engagement. Écrivez-nous pour convenir d’un moment.
+            Écrivez-nous pour convenir d’un moment : nous vous transmettons l’adresse, les créneaux
+            et les modalités. Une visite privée, sans engagement.
           </p>
           <hr className="gold-rule gold-rule-center" />
           <Link href="/contact" className="btn-gold">
-            Nous contacter
+            Prendre rendez-vous
           </Link>
         </section>
       </div>
