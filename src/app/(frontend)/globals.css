@@ -777,31 +777,47 @@ a {
 
 /* La scene propre a chaque banniere (image revelee a l'ouverture, ou un
    placeholder chaleureux si aucune image n'est definie). */
+/* La « piece » revelee derriere la porte : profondeur violette (couleur de
+   la maison) avec une lueur chaude au sol. */
 .col-scene {
   position: absolute;
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(90% 55% at 50% 30%, rgba(240, 210, 150, 0.16), transparent 62%),
-    linear-gradient(180deg, #372c21 0%, #4a3c28 52%, #6a5636 100%);
+    radial-gradient(100% 60% at 50% 88%, rgba(184, 142, 74, 0.2), transparent 60%),
+    linear-gradient(180deg, #1a1030 0%, #241838 55%, #322243 100%);
 }
 
 /* Image de la banniere : remplit toute la colonne. */
 .col-scene-img {
   object-fit: cover;
   object-position: center;
-  filter: brightness(0.82) saturate(0.95);
+  filter: brightness(0.86) saturate(0.98);
 }
 
-/* Voile sombre en haut : lisibilite du titre par-dessus le papier clair. */
+/* Voile violet en haut : lisibilite du titre + lumiere d'ambiance de la maison. */
 .shoji-home::before {
   content: '';
   position: absolute;
   inset: 0 0 auto 0;
-  height: 24%;
+  height: 26%;
   z-index: 3;
-  background: linear-gradient(to bottom, rgba(3, 1, 5, 0.7), transparent);
+  background: linear-gradient(to bottom, rgba(20, 12, 34, 0.88), rgba(20, 12, 34, 0.2) 70%, transparent);
   pointer-events: none;
+}
+
+/* Vignette violette : lumiere d'ambiance de la maison autour des portes en
+   papier (le washi chaud rayonne dans une piece eclairee de violet). */
+.shoji-home::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 60% at 50% -12%, rgba(74, 38, 94, 0.5), transparent 58%),
+    radial-gradient(130% 62% at 50% 112%, rgba(38, 22, 58, 0.55), transparent 60%),
+    radial-gradient(90% 120% at 50% 50%, transparent 62%, rgba(24, 14, 40, 0.4));
 }
 
 /* La rangee de bannieres/portes (au-dessus de la scene). */
