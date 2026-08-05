@@ -112,6 +112,13 @@ export default async function ProductPage({ params }: Args) {
           <h1 className="product-title">{product.name}</h1>
           {product.shortDescription && <p className="product-lede">{product.shortDescription}</p>}
 
+          {product.description ? (
+            <div className="product-story">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              <RichText data={product.description as any} />
+            </div>
+          ) : null}
+
           {variants.length > 0 ? (
             <div className="mt-8">
               <ProductBuyBox
@@ -144,14 +151,6 @@ export default async function ProductPage({ params }: Args) {
           </div>
         </section>
       )}
-
-      {/* Récit long (la voix du client). */}
-      {product.description ? (
-        <section className="product-description prose prose-invert mx-auto mt-16 max-w-3xl">
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          <RichText data={product.description as any} />
-        </section>
-      ) : null}
 
       {/* Détails — lignes étiquetées. */}
       {detailRows.length > 0 && (

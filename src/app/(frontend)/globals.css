@@ -820,7 +820,7 @@ a {
   grid-template-columns: 1fr;
   gap: clamp(2rem, 5vw, 4rem);
   margin-top: 2rem;
-  align-items: center;
+  align-items: start;
 }
 
 @media (min-width: 860px) {
@@ -867,10 +867,30 @@ a {
 
 .product-lede {
   margin-top: 1.5rem;
-  color: var(--color-muted);
-  font-size: 1.02rem;
-  line-height: 1.75;
+  color: var(--foreground);
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.7;
   max-width: 34rem;
+}
+
+/* Récit long du produit (la voix du client), à côté de l'image — c'est le
+   cœur de texte de la fiche, dense comme une belle page de maison. */
+.product-story {
+  margin-top: 1.5rem;
+  max-width: 36rem;
+}
+
+.product-story p {
+  margin-top: 1.15rem;
+  color: rgba(244, 237, 227, 0.86);
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+.product-story p:first-child {
+  margin-top: 0;
 }
 
 /* Blocs centres « Notes olfactives » / « Details » avec titre souligne. */
