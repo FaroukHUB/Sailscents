@@ -125,6 +125,13 @@ export default async function ParfumsPage() {
                   {items.map((product) => {
                     const price = fromPrice(product)
                     const image = productImage(product)
+                    const origin = product.origin?.country
+                    const notes = product.olfactiveNotes
+                    const noteRows = [
+                      { label: 'Tête', value: notes?.top },
+                      { label: 'Cœur', value: notes?.heart },
+                      { label: 'Fond', value: notes?.base },
+                    ].filter((n) => n.value)
                     return (
                       <Link
                         key={product.id}
@@ -137,15 +144,29 @@ export default async function ParfumsPage() {
                               src={image.url}
                               alt={image.alt ?? product.name}
                               fill
-                              sizes="(min-width: 640px) 18rem, 100vw"
+                              sizes="(min-width: 640px) 20rem, 100vw"
                               className="product-row__img"
                             />
                           )}
                         </span>
                         <span className="product-row__body">
+                          <span className="product-row__kicker">
+                            {category.name}
+                            {origin ? ` · ${origin}` : ''}
+                          </span>
                           <span className="product-row__name">{product.name}</span>
                           {product.shortDescription && (
                             <span className="product-row__desc">{product.shortDescription}</span>
+                          )}
+                          {noteRows.length > 0 && (
+                            <span className="product-row__notes">
+                              {noteRows.map((n) => (
+                                <span key={n.label} className="product-row__note">
+                                  <span className="product-row__note-label">{n.label}</span>
+                                  <span className="product-row__note-value">{n.value}</span>
+                                </span>
+                              ))}
+                            </span>
                           )}
                           <span className="product-row__meta">
                             {price != null && <span className="product-row__price">à partir de {price} €</span>}

@@ -755,10 +755,49 @@ a {
   line-height: 1.15;
 }
 
+.product-row__kicker {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--color-accent);
+}
+
 .product-row__desc {
+  color: rgba(244, 237, 227, 0.82);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  max-width: 52ch;
+}
+
+/* Notes olfactives condensees dans la carte (esprit DI SER). */
+.product-row__notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.product-row__note {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0.9rem;
+  align-items: baseline;
+}
+
+.product-row__note-label {
+  font-family: var(--font-display), serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.product-row__note-value {
+  font-size: 0.88rem;
   color: var(--color-muted);
-  font-size: 0.95rem;
-  max-width: 46ch;
+  line-height: 1.5;
 }
 
 .product-row__meta {
@@ -795,7 +834,7 @@ a {
   }
 
   .product-row__media {
-    width: clamp(14rem, 26vw, 20rem);
+    width: clamp(15rem, 28vw, 22rem);
     aspect-ratio: auto;
   }
 
