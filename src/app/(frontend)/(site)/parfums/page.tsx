@@ -122,7 +122,7 @@ export default async function ParfumsPage() {
               <div key={category.id} className="mt-12">
                 <p className="kicker">{category.name}</p>
                 <div className="mt-4 flex flex-col gap-5">
-                  {items.map((product) => {
+                  {items.map((product, i) => {
                     const price = fromPrice(product)
                     const image = productImage(product)
                     const origin = product.origin?.country
@@ -136,7 +136,7 @@ export default async function ParfumsPage() {
                       <Link
                         key={product.id}
                         href={`/boutique/${category.slug}/${product.slug}`}
-                        className="product-row"
+                        className={`product-row${i % 2 === 1 ? ' is-reversed' : ''}`}
                       >
                         <span className={`product-row__media${image ? ' has-image' : ''}`}>
                           {image?.url && (

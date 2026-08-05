@@ -841,6 +841,11 @@ a {
   .product-row__body {
     flex: 1 1 0%;
   }
+
+  /* Une carte sur deux : image à droite (zigzag). */
+  .product-row.is-reversed {
+    flex-direction: row-reverse;
+  }
 }
 
 /* ------------------------------------------------------------------ *
