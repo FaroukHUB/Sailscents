@@ -9,9 +9,9 @@ import { breadcrumbJsonLd, faqPageJsonLd, serviceJsonLd, webPageJsonLd } from '@
 export const dynamic = 'force-dynamic'
 
 const PATH = '/nos-boutiques'
-const TITLE = 'Nos Boutiques — acheter en personne, sur rendez-vous'
+const TITLE = 'Nos Boutiques — nous rencontrer, sentir et acheter en personne'
 const DESCRIPTION =
-  'Découvrez et achetez nos parfums rares en personne : bois de Oud, Attars, roses de collection, mukhalat. Une boutique confidentielle, sur rendez-vous, où un connaisseur vous reçoit, vous conseille et vous fait tester chaque essence.'
+  'Au-delà de la vente en ligne, découvrez et achetez nos parfums rares en personne : bois de Oud, Attars, roses de collection, mukhalat. Un connaisseur vous reçoit, vous conseille et vous fait tester chaque essence. Adresse et horaires communiqués très prochainement.'
 
 const FAQ = [
   {
@@ -22,12 +22,12 @@ const FAQ = [
   {
     question: 'Où se trouve votre boutique ?',
     answer:
-      'Nous recevons sur rendez-vous, en privé. L’adresse exacte et les créneaux disponibles vous sont communiqués à la confirmation de votre rendez-vous — une manière de préserver l’intimité et la qualité de l’accueil.',
+      'Notre boutique ouvre très prochainement. L’adresse exacte et les horaires seront affichés ici même, sur cette page, dès qu’ils seront disponibles. En attendant, écrivez-nous pour être prévenu de l’ouverture.',
   },
   {
-    question: 'Comment prendre rendez-vous ?',
+    question: 'Comment être informé de l’ouverture ?',
     answer:
-      'Contactez-nous via la page Contact. Nous convenons ensemble d’un créneau, puis nous vous transmettons l’adresse et les modalités pratiques.',
+      'Contactez-nous via la page Contact : nous vous tiendrons informé de l’adresse, des horaires et de la date d’ouverture dès que possible.',
   },
   {
     question: 'Faut-il acheter pour venir ?',
@@ -49,7 +49,7 @@ export default async function NosBoutiquesPage() {
 
   const jsonLd = [
     webPageJsonLd({ path: PATH, name: 'Nos Boutiques', description: DESCRIPTION }),
-    serviceJsonLd({ path: PATH, name: 'Boutique privée Sailscents (sur rendez-vous)', description: DESCRIPTION }),
+    serviceJsonLd({ path: PATH, name: 'Boutique Sailscents — vente et conseil en personne', description: DESCRIPTION }),
     faqPageJsonLd(FAQ),
     breadcrumbJsonLd([
       { name: 'Accueil', path: '/' },
@@ -72,12 +72,12 @@ export default async function NosBoutiquesPage() {
           <nav className="breadcrumb" aria-label="Fil d’Ariane">
             <Link href="/">Accueil</Link> <span aria-hidden="true">·</span> Nos Boutiques
           </nav>
-          <p className="kicker mt-6">Boutique confidentielle</p>
+          <p className="kicker mt-6">Nous rencontrer</p>
           <h1 className="mt-3">Nos Boutiques</h1>
           <p className="editorial-lede">
-            Nos parfums les plus rares se vivent aussi en personne. Nous vous recevons sur
-            rendez-vous, en privé, pour sentir, comparer et choisir — accompagné par un connaisseur,
-            un thé ou un café d’exception à la main.
+            Nos parfums les plus rares se vivent aussi en personne. Dans notre boutique, vous sentez,
+            comparez et choisissez — accompagné par un connaisseur, un thé ou un café d’exception à la
+            main.
           </p>
         </div>
       </header>
@@ -118,24 +118,23 @@ export default async function NosBoutiquesPage() {
           </div>
         </section>
 
-        <section className="editorial-section" aria-labelledby="confidentielle">
+        <section className="editorial-section" aria-labelledby="adresse">
           <div className="editorial-split">
             <div className="editorial-prose">
-              <p className="kicker">Sur rendez-vous</p>
-              <h2 id="confidentielle" className="mt-3">Une boutique confidentielle</h2>
+              <p className="kicker">Notre adresse</p>
+              <h2 id="adresse" className="mt-3">Bientôt, un lieu où nous trouver</h2>
               <p>
-                À l’image des grandes maisons de parfumerie de niche, nous recevons <strong>sur
-                rendez-vous</strong>, en toute intimité. Ce choix n’est pas une contrainte : c’est
-                une manière de préserver la qualité de l’accueil et l’attention que méritent des
-                matières aussi rares.
+                Nous préparons l’ouverture d’un lieu dédié, pensé comme un écrin pour la découverte de
+                nos matières. <strong>L’adresse exacte et les horaires seront affichés ici même</strong>,
+                sur cette page, dès qu’ils seront disponibles.
               </p>
               <p>
-                Pas de foule, pas de précipitation : un moment qui vous est entièrement consacré.
-                L’adresse et les créneaux vous sont communiqués à la confirmation de votre
-                rendez-vous.
+                Pas de foule, pas de précipitation : un lieu à taille humaine où l’on prend le temps de
+                sentir et de comprendre. Écrivez-nous pour être prévenu dès l’ouverture — vous serez
+                parmi les premiers informés.
               </p>
             </div>
-            <EditorialFigure caption="L’accueil, en toute intimité" />
+            <EditorialFigure caption="L’accueil, en toute simplicité" />
           </div>
         </section>
 
@@ -198,16 +197,16 @@ export default async function NosBoutiquesPage() {
           </div>
         </section>
 
-        <section className="appointment" aria-labelledby="rdv">
-          <p className="kicker">Sur rendez-vous</p>
-          <h2 id="rdv" className="mt-3">Nous rendre visite</h2>
+        <section className="appointment" aria-labelledby="informer">
+          <p className="kicker">Rester informé</p>
+          <h2 id="informer" className="mt-3">Être prévenu de l’ouverture</h2>
           <p>
-            Écrivez-nous pour convenir d’un moment : nous vous transmettons l’adresse, les créneaux
-            et les modalités. Une visite privée, sans engagement.
+            Laissez-nous un mot : nous vous préviendrons dès que l’adresse et les horaires de la
+            boutique seront disponibles. Une visite sans engagement vous attendra.
           </p>
           <hr className="gold-rule gold-rule-center" />
           <Link href="/contact" className="btn-gold">
-            Prendre rendez-vous
+            Nous écrire
           </Link>
         </section>
       </div>
