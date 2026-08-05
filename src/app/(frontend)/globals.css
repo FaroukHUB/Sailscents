@@ -1008,6 +1008,23 @@ a {
   }
 }
 
+/* Bouton ensō (cercle Zen du Kōdō) : retour à l'accueil (les portes). */
+.enso-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  transition:
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 300ms ease;
+  opacity: 0.85;
+}
+
+.enso-home:hover {
+  opacity: 1;
+  transform: rotate(-18deg);
+}
+
 /* ------------------------------------------------------------------ *
  * Formulaire de contact
  * ------------------------------------------------------------------ */
@@ -1354,9 +1371,9 @@ a {
 
 .shoji-home.is-opening .shoji-veil {
   opacity: 1;
-  /* Les battants finissent de s'ouvrir vers 1150 ms ; on laisse le tatami
-     bien visible ~1 s avant que le voile monte pour la navigation. */
-  transition: opacity 550ms ease 2200ms;
+  /* Les battants s'ouvrent (~1150 ms) ; le voile monte juste après pour
+     couvrir la bascule de page (navigation à 1400 ms). */
+  transition: opacity 380ms ease 1000ms;
 }
 
 /* Repli « mouvement reduit » : un simple fondu vers le noir, sans coulissement. */

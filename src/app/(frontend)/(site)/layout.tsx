@@ -27,7 +27,24 @@ export default function SiteLayout({ children }: Readonly<{ children: React.Reac
               </Link>
             ))}
           </nav>
-          <CartLink />
+          <div className="flex items-center gap-5">
+            <Link href="/" aria-label="Retour à l’accueil — toutes les portes" className="enso-home">
+              <svg viewBox="0 0 24 24" width="27" height="27" aria-hidden="true">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeDasharray="49 8"
+                  transform="rotate(115 12 12)"
+                />
+              </svg>
+            </Link>
+            <CartLink />
+          </div>
         </div>
       </header>
 

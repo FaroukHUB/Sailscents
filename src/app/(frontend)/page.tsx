@@ -35,7 +35,7 @@ export default async function HomePage() {
 
   return (
     <div className="relative h-dvh">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 px-6 py-4 text-center md:py-8">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden px-6 py-4 text-center md:block md:py-8">
         <p className="text-[0.65rem] tracking-[0.3em] text-[color:var(--color-accent)] uppercase md:text-xs">
           Maison sensorielle
         </p>

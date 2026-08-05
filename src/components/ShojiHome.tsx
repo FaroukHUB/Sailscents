@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type Panel = {
   href: string
@@ -29,6 +29,12 @@ export function ShojiHome({ panels }: Props) {
   const [openingHref, setOpeningHref] = useState<string | null>(null)
   const [fastExit, setFastExit] = useState(false)
 
+  // Précharge les pages des portes dès l'accueil : au clic, la cible est déjà
+  // récupérée, la navigation est quasi instantanée.
+  useEffect(() => {
+    panels.forEach((panel) => router.prefetch(panel.href))
+  }, [panels, router])
+
   const enter = (event: React.MouseEvent, href: string) => {
     event.preventDefault()
     if (openingHref || fastExit) return
@@ -41,9 +47,9 @@ export function ShojiHome({ panels }: Props) {
     }
 
     setOpeningHref(href)
-    // Ouverture des battants (~1150 ms) + pause sur l'image (~1 s) + montee du
-    // voile (voir globals.css). La navigation se fait une fois le voile plein.
-    window.setTimeout(() => router.push(href), 2750)
+    // Ouverture des battants, bref aperçu de l'image, puis navigation (la page
+    // est déjà préchargée). Voile de couverture juste avant (voir globals.css).
+    window.setTimeout(() => router.push(href), 1400)
   }
 
   return (
