@@ -1008,6 +1008,99 @@ a {
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * Formulaire de contact
+ * ------------------------------------------------------------------ */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 40rem;
+}
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
+}
+
+@media (min-width: 560px) {
+  .contact-form__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.contact-field span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  background: var(--color-background-elevated);
+  color: var(--foreground);
+  border: 1px solid var(--color-border);
+  border-radius: 0.3rem;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  font-size: 1rem;
+  transition: border-color 200ms ease;
+}
+
+.contact-field textarea {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.contact-form .btn-gold {
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.contact-form .btn-gold:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Champ piège anti-spam : hors écran, jamais vu par un humain. */
+.contact-form__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-form__error {
+  color: #e0a3a3;
+  font-size: 0.9rem;
+}
+
+.contact-form__done {
+  border: 1px solid var(--color-border);
+  background: linear-gradient(160deg, var(--color-background-elevated), var(--background) 90%);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
 /* Bloc rendez-vous (Le Rituel). */
 .appointment {
   margin-top: clamp(2rem, 6vw, 4rem);
