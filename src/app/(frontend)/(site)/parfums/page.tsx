@@ -121,7 +121,7 @@ export default async function ParfumsPage() {
             {catalogue.map(({ category, items }) => (
               <div key={category.id} className="mt-12">
                 <p className="kicker">{category.name}</p>
-                <div className="mt-4 flex flex-col gap-5">
+                <div className="mt-6 flex flex-col gap-10 md:gap-12">
                   {items.map((product, i) => {
                     const price = fromPrice(product)
                     const image = productImage(product)
