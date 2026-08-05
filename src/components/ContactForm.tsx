@@ -4,16 +4,26 @@ import { useState } from 'react'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
-const ERRORS: Record<string, string> = {
-  missing_fields: 'Merci de renseigner votre nom, votre e-mail et votre message.',
-  invalid_email: 'Cette adresse e-mail ne semble pas valide.',
-  contact_not_configured:
-    'Le formulaire n’est pas encore actif. Réessayez un peu plus tard — nous mettons cela en place.',
-  send_failed: 'L’envoi a échoué. Merci de réessayer dans un instant.',
-  default: 'Une erreur est survenue. Merci de réessayer.',
+export type ContactLabels = {
+  name: string
+  email: string
+  subject: string
+  message: string
+  send: string
+  sending: string
+  sentTitle: string
+  sentBody: string
+  hp: string
+  errors: {
+    missing_fields: string
+    invalid_email: string
+    contact_not_configured: string
+    send_failed: string
+    default: string
+  }
 }
 
-export function ContactForm() {
+export function ContactForm({ labels }: { labels: ContactLabels }) {
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState('')
 
@@ -40,20 +50,19 @@ export function ContactForm() {
         return
       }
       setStatus('error')
-      setMessage(ERRORS[json?.error] ?? ERRORS.default)
+      const key = (json?.error as keyof ContactLabels['errors']) ?? 'default'
+      setMessage(labels.errors[key] ?? labels.errors.default)
     } catch {
       setStatus('error')
-      setMessage(ERRORS.default)
+      setMessage(labels.errors.default)
     }
   }
 
   if (status === 'sent') {
     return (
       <div className="contact-form__done" role="status">
-        <p className="text-lg">Merci, votre message est parti.</p>
-        <p className="mt-2 text-[color:var(--color-muted)]">
-          Nous vous répondons dès que possible, à l’adresse que vous avez indiquée.
-        </p>
+        <p className="text-lg">{labels.sentTitle}</p>
+        <p className="mt-2 text-[color:var(--color-muted)]">{labels.sentBody}</p>
       </div>
     )
   }
@@ -63,29 +72,29 @@ export function ContactForm() {
       {/* Champ piège anti-spam : masqué aux humains. */}
       <div aria-hidden="true" className="contact-form__hp">
         <label>
-          Ne pas remplir
+          {labels.hp}
           <input type="text" name="company" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
 
       <div className="contact-form__row">
         <label className="contact-field">
-          <span>Nom</span>
+          <span>{labels.name}</span>
           <input type="text" name="name" required maxLength={200} autoComplete="name" />
         </label>
         <label className="contact-field">
-          <span>E-mail</span>
+          <span>{labels.email}</span>
           <input type="email" name="email" required maxLength={200} autoComplete="email" />
         </label>
       </div>
 
       <label className="contact-field">
-        <span>Sujet (facultatif)</span>
+        <span>{labels.subject}</span>
         <input type="text" name="subject" maxLength={200} />
       </label>
 
       <label className="contact-field">
-        <span>Message</span>
+        <span>{labels.message}</span>
         <textarea name="message" required rows={6} maxLength={5000} />
       </label>
 
@@ -96,7 +105,7 @@ export function ContactForm() {
       )}
 
       <button type="submit" className="btn-gold" disabled={status === 'sending'}>
-        {status === 'sending' ? 'Envoi…' : 'Envoyer le message'}
+        {status === 'sending' ? labels.sending : labels.send}
       </button>
     </form>
   )
