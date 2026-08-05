@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { defaultLocale, isLocale, type Locale } from '@/i18n/config'
+import { localizeCategoryName } from '@/i18n/productTranslations'
 import type { Category } from '@/types/content'
 
 export const dynamic = 'force-dynamic'
@@ -52,7 +53,7 @@ export default async function BoutiquePage({ params }: { params: Promise<{ local
             href={p(`/boutique/${category.slug}`)}
             className="border border-[color:var(--color-border)] p-8 transition-colors hover:border-[color:var(--color-accent)]"
           >
-            <h2 className="text-2xl">{category.name}</h2>
+            <h2 className="text-2xl">{localizeCategoryName(category, locale)}</h2>
           </Link>
         ))}
         {categories.length === 0 && <p className="text-[color:var(--color-muted)]">{t.empty}</p>}

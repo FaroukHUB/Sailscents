@@ -9,6 +9,7 @@ import { getSectionImage } from '@/lib/sectionImage'
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
 import { getDictionary } from '@/i18n'
 import { defaultLocale, isLocale, type Locale } from '@/i18n/config'
+import { localizeCategoryName, localizeProduct } from '@/i18n/productTranslations'
 import type { Category, Media, Product } from '@/types/content'
 
 export const dynamic = 'force-dynamic'
@@ -179,11 +180,14 @@ export default async function ParfumsPage({ params }: { params: Promise<{ locale
             <h2 id="acheter" className="mt-3">{t.shop.h2}</h2>
             <p className="editorial-lede">{t.shop.lede}</p>
 
-            {catalogue.map(({ category, items }) => (
+            {catalogue.map(({ category, items }) => {
+              const catName = localizeCategoryName(category, locale)
+              return (
               <div key={category.id} className="mt-12">
-                <p className="kicker">{category.name}</p>
+                <p className="kicker">{catName}</p>
                 <div className="mt-6 flex flex-col gap-10 md:gap-12">
-                  {items.map((product, i) => {
+                  {items.map((rawProduct, i) => {
+                    const product = localizeProduct(rawProduct, locale)
                     const price = fromPrice(product)
                     const image = productImage(product)
                     const origin = product.origin?.country
@@ -206,7 +210,7 @@ export default async function ParfumsPage({ params }: { params: Promise<{ locale
                         </span>
                         <span className="product-row__body">
                           <span className="product-row__kicker">
-                            {category.name}
+                            {catName}
                             {origin ? ` · ${origin}` : ''}
                           </span>
                           <span className="product-row__name">{product.name}</span>
@@ -235,7 +239,8 @@ export default async function ParfumsPage({ params }: { params: Promise<{ locale
                   })}
                 </div>
               </div>
-            ))}
+              )
+            })}
           </section>
         )}
 

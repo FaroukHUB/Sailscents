@@ -7,6 +7,7 @@ import { ProductBuyBox } from '@/components/cart/ProductBuyBox'
 import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { defaultLocale, isLocale, type Locale } from '@/i18n/config'
+import { localizeCategoryName, localizeProduct } from '@/i18n/productTranslations'
 import type { Category, Media, Product } from '@/types/content'
 
 export const dynamic = 'force-dynamic'
@@ -66,8 +67,9 @@ const mediaUrl = (m: Media | number | null | undefined): string | undefined =>
 export const generateMetadata = async ({ params }: Args) => {
   const { locale, category, product: slug } = await params
   const loc = isLocale(locale) ? locale : defaultLocale
-  const product = await getProduct(slug)
-  if (!product) return {}
+  const raw = await getProduct(slug)
+  if (!raw) return {}
+  const product = localizeProduct(raw, loc)
   return buildMetadata({
     seo: product.seo,
     fallbackTitle: product.name,
@@ -83,11 +85,12 @@ export default async function ProductPage({ params }: Args) {
   const locale = isLocale(raw) ? raw : defaultLocale
   const t = LABELS[locale]
   const p = (path: string) => `/${locale}${path}`
-  const product = await getProduct(slug)
-  if (!product) notFound()
+  const rawProduct = await getProduct(slug)
+  if (!rawProduct) notFound()
+  const product = localizeProduct(rawProduct, locale)
 
   const category = typeof product.category === 'object' ? (product.category as Category) : null
-  const categoryName = category?.name ?? ''
+  const categoryName = category ? localizeCategoryName(category, locale) : ''
   const mainImageUrl = mediaUrl(product.mainImage)
   const variants = product.variants ?? []
   const lowestPrice = variants.length ? Math.min(...variants.map((v) => v.price)) : undefined
