@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
@@ -6,7 +7,13 @@ import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { getSectionImage } from '@/lib/sectionImage'
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
-import type { Category, Product } from '@/types/content'
+import type { Category, Media, Product } from '@/types/content'
+
+// Image principale du produit (si renseignée dans l'admin), sinon null.
+const productImage = (product: Product) => {
+  const m = product.mainImage
+  return m && typeof m === 'object' ? (m as Media) : null
+}
 
 // Prix d'appel : la variante la moins chère (« à partir de … »).
 const fromPrice = (product: Product) => {
@@ -114,26 +121,37 @@ export default async function ParfumsPage() {
             {catalogue.map(({ category, items }) => (
               <div key={category.id} className="mt-12">
                 <p className="kicker">{category.name}</p>
-                <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+                <div className="mt-4 flex flex-col gap-5">
                   {items.map((product) => {
                     const price = fromPrice(product)
+                    const image = productImage(product)
                     return (
                       <Link
                         key={product.id}
                         href={`/boutique/${category.slug}/${product.slug}`}
-                        className="flex flex-col border border-[color:var(--color-border)] p-6 transition-colors hover:border-[color:var(--color-accent)]"
+                        className="product-row"
                       >
-                        <h3 className="text-xl">{product.name}</h3>
-                        {product.shortDescription && (
-                          <p className="mt-2 flex-1 text-sm text-[color:var(--color-muted)]">
-                            {product.shortDescription}
-                          </p>
-                        )}
-                        {price != null && (
-                          <p className="mt-4 text-sm tracking-wide text-[color:var(--color-accent)]">
-                            à partir de {price} €
-                          </p>
-                        )}
+                        <span className={`product-row__media${image ? ' has-image' : ''}`}>
+                          {image?.url && (
+                            <Image
+                              src={image.url}
+                              alt={image.alt ?? product.name}
+                              fill
+                              sizes="(min-width: 640px) 18rem, 100vw"
+                              className="product-row__img"
+                            />
+                          )}
+                        </span>
+                        <span className="product-row__body">
+                          <span className="product-row__name">{product.name}</span>
+                          {product.shortDescription && (
+                            <span className="product-row__desc">{product.shortDescription}</span>
+                          )}
+                          <span className="product-row__meta">
+                            {price != null && <span className="product-row__price">à partir de {price} €</span>}
+                            <span className="product-row__cta">Découvrir la fiche →</span>
+                          </span>
+                        </span>
                       </Link>
                     )
                   })}

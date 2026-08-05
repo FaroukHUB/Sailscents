@@ -57,6 +57,17 @@ export default async function ProductPage({ params }: Args) {
     { label: 'Fond', value: notes?.base },
   ].filter((n) => n.value)
 
+  const contenances = variants.map((v) => v.label).filter(Boolean).join('   ·   ')
+  const priceLabel =
+    lowestPrice !== undefined ? (variants.length > 1 ? `à partir de ${lowestPrice} €` : `${lowestPrice} €`) : undefined
+  const detailRows = [
+    { label: 'Univers', value: categoryName || undefined },
+    { label: 'Origine', value: product.origin?.country ?? undefined },
+    { label: 'Méthode', value: product.origin?.method ?? undefined },
+    { label: 'Contenances', value: contenances || undefined },
+    { label: 'Prix', value: priceLabel },
+  ].filter((r) => r.value)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -74,7 +85,7 @@ export default async function ProductPage({ params }: Args) {
   }
 
   return (
-    <article className="mx-auto max-w-6xl px-6 py-16">
+    <article className="product-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <nav className="breadcrumb" aria-label="Fil d’Ariane">
@@ -83,32 +94,23 @@ export default async function ProductPage({ params }: Args) {
         {product.name}
       </nav>
 
-      <div className="mt-8 grid grid-cols-1 gap-10 md:grid-cols-2">
-        {/* Visuel */}
-        <div className="product-media">
-          {mainImageUrl ? (
-            <Image
-              src={mainImageUrl}
-              alt={product.name}
-              width={900}
-              height={1100}
-              className="product-media-img"
-              priority
-            />
-          ) : (
-            <div className="product-media-placeholder" aria-hidden="true" />
+      {/* En-tête : grande image à gauche, nom + récit + achat à droite. */}
+      <div className="product-hero">
+        <div className={`product-hero__media${mainImageUrl ? ' has-image' : ''}`}>
+          {mainImageUrl && (
+            <Image src={mainImageUrl} alt={product.name} fill sizes="(min-width: 860px) 40vw, 100vw" priority />
           )}
         </div>
 
-        {/* Achat + résumé */}
-        <div>
+        <div className="product-hero__intro">
           {categoryName && (
-            <p className="kicker">{categoryName}{product.origin?.country ? ` · ${product.origin.country}` : ''}</p>
+            <p className="kicker">
+              {categoryName}
+              {product.origin?.country ? ` · ${product.origin.country}` : ''}
+            </p>
           )}
-          <h1 className="mt-3 text-4xl">{product.name}</h1>
-          {product.shortDescription && (
-            <p className="mt-4 text-[color:var(--color-muted)]">{product.shortDescription}</p>
-          )}
+          <h1 className="product-title">{product.name}</h1>
+          {product.shortDescription && <p className="product-lede">{product.shortDescription}</p>}
 
           {variants.length > 0 ? (
             <div className="mt-8">
@@ -123,44 +125,50 @@ export default async function ProductPage({ params }: Args) {
           ) : (
             lowestPrice !== undefined && <p className="mt-8 text-2xl">à partir de {lowestPrice} €</p>
           )}
-
-          {(product.origin?.country || product.origin?.method) && (
-            <dl className="product-facts">
-              {product.origin?.country && (
-                <div>
-                  <dt>Origine</dt>
-                  <dd>{product.origin.country}</dd>
-                </div>
-              )}
-              {product.origin?.method && (
-                <div>
-                  <dt>Méthode</dt>
-                  <dd>{product.origin.method}</dd>
-                </div>
-              )}
-            </dl>
-          )}
-
-          {noteRows.length > 0 && (
-            <dl className="product-facts">
-              {noteRows.map((n) => (
-                <div key={n.label}>
-                  <dt>{n.label}</dt>
-                  <dd>{n.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
         </div>
       </div>
 
-      {/* Description longue (la voix du client) */}
+      {/* Notes olfactives — lignes étiquetées. */}
+      {noteRows.length > 0 && (
+        <section className="spec-block" aria-labelledby="notes-title">
+          <h2 id="notes-title" className="spec-block__title">
+            Notes olfactives
+          </h2>
+          <div className="spec-list">
+            {noteRows.map((n) => (
+              <div key={n.label} className="spec-row">
+                <span className="spec-label">{n.label}</span>
+                <span className="spec-value">{n.value}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Récit long (la voix du client). */}
       {product.description ? (
-        <section className="product-description prose prose-invert mt-16 max-w-3xl">
+        <section className="product-description prose prose-invert mx-auto mt-16 max-w-3xl">
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           <RichText data={product.description as any} />
         </section>
       ) : null}
+
+      {/* Détails — lignes étiquetées. */}
+      {detailRows.length > 0 && (
+        <section className="spec-block" aria-labelledby="details-title">
+          <h2 id="details-title" className="spec-block__title">
+            Détails
+          </h2>
+          <div className="spec-list">
+            {detailRows.map((r) => (
+              <div key={r.label} className="spec-row">
+                <span className="spec-label">{r.label}</span>
+                <span className="spec-value">{r.value}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   )
 }

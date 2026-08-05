@@ -693,6 +693,246 @@ a {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
 }
 
+/* ------------------------------------------------------------------ *
+ * Liste de produits « image a gauche / texte a droite », empilee
+ * (page Les Parfums). Chaque ligne est une carte cliquable vers la fiche.
+ * ------------------------------------------------------------------ */
+.product-row {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: linear-gradient(160deg, var(--color-background-elevated), var(--background) 90%);
+  transition:
+    border-color 300ms ease,
+    transform 300ms ease;
+}
+
+.product-row:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+/* Zone image a gauche. Placeholder violet + ensō tant qu'aucune image. */
+.product-row__media {
+  position: relative;
+  flex-shrink: 0;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: linear-gradient(165deg, #241a2a, #150f1b 82%);
+}
+
+.product-row__media:not(.has-image)::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(42%, 6rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid rgba(171, 138, 82, 0.5);
+  border-radius: 50%;
+  -webkit-mask: conic-gradient(from 205deg, #000 0 302deg, transparent 302deg);
+  mask: conic-gradient(from 205deg, #000 0 302deg, transparent 302deg);
+}
+
+.product-row__img {
+  object-fit: cover;
+}
+
+/* Zone texte a droite. */
+.product-row__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.product-row__name {
+  font-family: var(--font-display), serif;
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  line-height: 1.15;
+}
+
+.product-row__desc {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  max-width: 46ch;
+}
+
+.product-row__meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 0.4rem;
+}
+
+.product-row__price {
+  color: var(--color-accent);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.product-row__cta {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--color-muted);
+  transition: color 300ms ease;
+}
+
+.product-row:hover .product-row__cta {
+  color: var(--color-accent);
+}
+
+/* Desktop : image a gauche (largeur fixe), texte a droite. */
+@media (min-width: 640px) {
+  .product-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .product-row__media {
+    width: clamp(14rem, 26vw, 20rem);
+    aspect-ratio: auto;
+  }
+
+  .product-row__body {
+    flex: 1 1 0%;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Fiche produit premium (esprit DI SER / Kōdō) : grande image a gauche,
+ * nom mincho + recit a droite, puis blocs « Notes » et « Details » a
+ * lignes etiquetees (pastilles), beaucoup d'air.
+ * ------------------------------------------------------------------ */
+.product-page {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 3rem) 1.5rem clamp(3rem, 8vw, 6rem);
+}
+
+.product-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  margin-top: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .product-hero {
+    grid-template-columns: 1.05fr 1fr;
+  }
+}
+
+.product-hero__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background:
+    radial-gradient(80% 60% at 50% 40%, rgba(154, 118, 40, 0.1), transparent 70%),
+    linear-gradient(165deg, #241a2a, #150f1b 82%);
+}
+
+.product-hero__media img {
+  object-fit: cover;
+}
+
+.product-hero__media:not(.has-image)::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(40%, 8rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid rgba(171, 138, 82, 0.5);
+  border-radius: 50%;
+  -webkit-mask: conic-gradient(from 205deg, #000 0 302deg, transparent 302deg);
+  mask: conic-gradient(from 205deg, #000 0 302deg, transparent 302deg);
+}
+
+.product-title {
+  font-family: var(--font-display), serif;
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  margin-top: 0.75rem;
+}
+
+.product-lede {
+  margin-top: 1.5rem;
+  color: var(--color-muted);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  max-width: 34rem;
+}
+
+/* Blocs centres « Notes olfactives » / « Details » avec titre souligne. */
+.spec-block {
+  max-width: 44rem;
+  margin: clamp(3rem, 7vw, 5rem) auto 0;
+}
+
+.spec-block__title {
+  text-align: center;
+  font-family: var(--font-display), serif;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.spec-list {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.spec-row {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 1.5rem;
+  align-items: baseline;
+}
+
+.spec-label {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(171, 138, 82, 0.35);
+  border-radius: 0.45rem;
+  background: rgba(8, 5, 12, 0.45);
+  font-family: var(--font-display), serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.spec-value {
+  color: var(--foreground);
+  line-height: 1.6;
+}
+
+@media (max-width: 520px) {
+  .spec-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .spec-label {
+    width: auto;
+    justify-self: start;
+  }
+}
+
 /* Bloc rendez-vous (Le Rituel). */
 .appointment {
   margin-top: clamp(2rem, 6vw, 4rem);
