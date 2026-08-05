@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { SITE_NAME, SITE_URL } from './constants'
+import { locales, defaultLocale, type Locale } from '@/i18n/config'
 
 type MediaLike = { url?: string | null; alt?: string | null } | number | null | undefined
 
@@ -28,20 +29,30 @@ export const buildMetadata = (params: {
   fallbackTitle: string
   fallbackDescription?: string
   fallbackImage?: MediaLike
+  /** Chemin relatif à la langue, ex. `/parfums` (le préfixe /fr /en est ajouté ici). */
   path: string
+  /** Langue de la page (par défaut FR). Pilote canonical, hreflang et og:locale. */
+  locale?: Locale
 }): Metadata => {
-  const { seo, fallbackTitle, fallbackDescription, fallbackImage, path } = params
+  const { seo, fallbackTitle, fallbackDescription, fallbackImage, path, locale } = params
+  const loc = locale ?? defaultLocale
 
   const title = seo?.metaTitle || fallbackTitle
   const description = seo?.metaDescription || fallbackDescription || undefined
   const image = resolveImageUrl(seo?.ogImage) || resolveImageUrl(fallbackImage)
-  const canonical = seo?.canonical || `${SITE_URL}${path}`
+  const canonical = seo?.canonical || `${SITE_URL}/${loc}${path}`
+
+  // hreflang : une URL par langue + x-default (français).
+  const languages: Record<string, string> = Object.fromEntries(
+    locales.map((l) => [l, `${SITE_URL}/${l}${path}`]),
+  )
+  languages['x-default'] = `${SITE_URL}/${defaultLocale}${path}`
 
   return {
     // Le layout racine applique deja le gabarit "%s | Sailscents" — on ne fournit ici que le titre de page.
     title,
     description,
-    alternates: { canonical },
+    alternates: { canonical, languages },
     robots: seo?.noIndex ? { index: false, follow: false } : { index: true, follow: true },
     openGraph: {
       title,
@@ -49,7 +60,7 @@ export const buildMetadata = (params: {
       url: canonical,
       siteName: SITE_NAME,
       images: image ? [{ url: image }] : undefined,
-      locale: 'fr_FR',
+      locale: loc === 'en' ? 'en_US' : 'fr_FR',
       type: 'website',
     },
     twitter: {
