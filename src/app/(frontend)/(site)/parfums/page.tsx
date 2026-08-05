@@ -2,9 +2,39 @@ import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
 import { HeroImage } from '@/components/HeroImage'
+import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { getSectionImage } from '@/lib/sectionImage'
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
+import type { Category, Product } from '@/types/content'
+
+// Prix d'appel : la variante la moins chère (« à partir de … »).
+const fromPrice = (product: Product) => {
+  const prices = (product.variants ?? [])
+    .map((v) => v.price)
+    .filter((n): n is number => typeof n === 'number')
+  return prices.length ? Math.min(...prices) : null
+}
+
+// Récupère les produits publiés, groupés par univers (catégorie), dans l'ordre
+// des catégories. Alimente la partie « boutique » de la page Les Parfums.
+const getCatalogue = async () => {
+  const payload = await getPayloadClient()
+  const [{ docs: categories }, { docs: products }] = await Promise.all([
+    payload.find({ collection: 'categories', limit: 50, sort: 'name' }),
+    payload.find({ collection: 'products', where: { status: { equals: 'published' } }, limit: 200, depth: 1 }),
+  ])
+
+  return (categories as Category[])
+    .map((category) => ({
+      category,
+      items: (products as Product[]).filter((p) => {
+        const catId = typeof p.category === 'object' && p.category ? p.category.id : p.category
+        return catId === category.id
+      }),
+    }))
+    .filter((group) => group.items.length > 0)
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -36,6 +66,7 @@ export const generateMetadata = async () =>
 
 export default async function ParfumsPage() {
   const hero = await getSectionImage('boutiquePanel')
+  const catalogue = await getCatalogue()
 
   const jsonLd = [
     webPageJsonLd({ path: PATH, name: 'Les Parfums', description: DESCRIPTION, type: 'CollectionPage' }),
@@ -71,6 +102,47 @@ export default async function ParfumsPage() {
       </header>
 
       <div className="editorial-body">
+        {catalogue.length > 0 && (
+          <section className="editorial-section" aria-labelledby="acheter">
+            <p className="kicker">La sélection</p>
+            <h2 id="acheter" className="mt-3">Nos huiles à découvrir et commander</h2>
+            <p className="editorial-lede">
+              Des huiles rares, disponibles à la vente en ligne. Choisissez votre contenance sur la
+              fiche de chaque parfum.
+            </p>
+
+            {catalogue.map(({ category, items }) => (
+              <div key={category.id} className="mt-12">
+                <p className="kicker">{category.name}</p>
+                <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+                  {items.map((product) => {
+                    const price = fromPrice(product)
+                    return (
+                      <Link
+                        key={product.id}
+                        href={`/boutique/${category.slug}/${product.slug}`}
+                        className="flex flex-col border border-[color:var(--color-border)] p-6 transition-colors hover:border-[color:var(--color-accent)]"
+                      >
+                        <h3 className="text-xl">{product.name}</h3>
+                        {product.shortDescription && (
+                          <p className="mt-2 flex-1 text-sm text-[color:var(--color-muted)]">
+                            {product.shortDescription}
+                          </p>
+                        )}
+                        {price != null && (
+                          <p className="mt-4 text-sm tracking-wide text-[color:var(--color-accent)]">
+                            à partir de {price} €
+                          </p>
+                        )}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </section>
+        )}
+
         <section className="editorial-section" aria-labelledby="art">
           <div className="editorial-split">
             <div className="editorial-prose">
