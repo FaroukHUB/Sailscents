@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 const PATH = '/nos-boutiques'
 const TITLE = 'Nos Boutiques — nous rencontrer, sentir et acheter en personne'
 const DESCRIPTION =
-  'Au-delà de la vente en ligne, découvrez et achetez nos parfums rares en personne : bois de Oud, Attars, roses de collection, mukhalat. Un connaisseur vous reçoit, vous conseille et vous fait tester chaque essence. Adresse et horaires communiqués très prochainement.'
+  'Au-delà de la vente en ligne, nos parfums rares se découvrent aussi en personne : bois de Oud, Attars, roses de collection, mukhalat. Un connaisseur vous reçoit, vous conseille et vous fait tester chaque essence. Les informations pratiques de la boutique seront communiquées prochainement.'
 
 const FAQ = [
   {
@@ -22,12 +22,12 @@ const FAQ = [
   {
     question: 'Où se trouve votre boutique ?',
     answer:
-      'Notre boutique ouvre très prochainement. L’adresse exacte et les horaires seront affichés ici même, sur cette page, dès qu’ils seront disponibles. En attendant, écrivez-nous pour être prévenu de l’ouverture.',
+      'Nos matières se découvrent aussi en personne, dans notre boutique. Les informations pratiques — adresse, accès, horaires — seront indiquées ici même, sur cette page, dès qu’elles seront disponibles.',
   },
   {
-    question: 'Comment être informé de l’ouverture ?',
+    question: 'Comment nous rendre visite ?',
     answer:
-      'Contactez-nous via la page Contact : nous vous tiendrons informé de l’adresse, des horaires et de la date d’ouverture dès que possible.',
+      'Écrivez-nous via la page Contact : nous vous communiquons les informations pratiques et répondons à toutes vos questions.',
   },
   {
     question: 'Faut-il acheter pour venir ?',
@@ -121,17 +121,16 @@ export default async function NosBoutiquesPage() {
         <section className="editorial-section" aria-labelledby="adresse">
           <div className="editorial-split">
             <div className="editorial-prose">
-              <p className="kicker">Notre adresse</p>
-              <h2 id="adresse" className="mt-3">Bientôt, un lieu où nous trouver</h2>
+              <p className="kicker">Où nous trouver</p>
+              <h2 id="adresse" className="mt-3">Nos parfums, aussi en boutique</h2>
               <p>
-                Nous préparons l’ouverture d’un lieu dédié, pensé comme un écrin pour la découverte de
-                nos matières. <strong>L’adresse exacte et les horaires seront affichés ici même</strong>,
-                sur cette page, dès qu’ils seront disponibles.
+                Nos matières se découvrent également en personne : nos parfums sont présentés dans notre
+                boutique, où l’on peut les sentir, les comparer et les choisir tranquillement.
               </p>
               <p>
-                Pas de foule, pas de précipitation : un lieu à taille humaine où l’on prend le temps de
-                sentir et de comprendre. Écrivez-nous pour être prévenu dès l’ouverture — vous serez
-                parmi les premiers informés.
+                <strong>Les informations pratiques — adresse, accès, horaires — seront communiquées
+                prochainement</strong>, ici même. En attendant, n’hésitez pas à nous écrire pour toute
+                question.
               </p>
             </div>
             <EditorialFigure caption="L’accueil, en toute simplicité" />
@@ -198,11 +197,11 @@ export default async function NosBoutiquesPage() {
         </section>
 
         <section className="appointment" aria-labelledby="informer">
-          <p className="kicker">Rester informé</p>
-          <h2 id="informer" className="mt-3">Être prévenu de l’ouverture</h2>
+          <p className="kicker">Nous contacter</p>
+          <h2 id="informer" className="mt-3">Une question ? Écrivez-nous</h2>
           <p>
-            Laissez-nous un mot : nous vous préviendrons dès que l’adresse et les horaires de la
-            boutique seront disponibles. Une visite sans engagement vous attendra.
+            Pour toute question sur nos parfums ou sur les informations pratiques de la boutique,
+            laissez-nous un mot : nous vous répondons avec plaisir.
           </p>
           <hr className="gold-rule gold-rule-center" />
           <Link href="/contact" className="btn-gold">

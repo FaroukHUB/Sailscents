@@ -547,6 +547,17 @@ a {
   color: var(--foreground);
   font-weight: 500;
 }
+.editorial-prose h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.6rem;
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+}
+.editorial-prose h2:first-child {
+  margin-top: 0;
+}
+.editorial-prose a {
+  text-underline-offset: 0.2em;
+}
 
 /* Trio de reperes de confiance (autorite). */
 .trust-row {
