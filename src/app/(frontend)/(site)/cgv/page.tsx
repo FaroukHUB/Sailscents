@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { StaticPageShell } from '@/components/StaticPageShell'
 import { buildMetadata } from '@/lib/seo'
 
@@ -53,7 +55,7 @@ export default function CgvPage() {
       <h2>6. Livraison</h2>
       <p>
         Les modalités, délais et frais de livraison sont détaillés sur la page{' '}
-        <a href="/livraison-et-retours" className="text-[color:var(--color-accent)] underline">Livraison &amp; retours</a>.
+        <Link href="/livraison-et-retours" className="text-[color:var(--color-accent)] underline">Livraison &amp; retours</Link>.
       </p>
 
       <h2>7. Droit de rétractation</h2>
@@ -72,7 +74,7 @@ export default function CgvPage() {
       <h2>9. Données personnelles</h2>
       <p>
         Le traitement de vos données est décrit dans notre{' '}
-        <a href="/confidentialite" className="text-[color:var(--color-accent)] underline">politique de confidentialité</a>.
+        <Link href="/confidentialite" className="text-[color:var(--color-accent)] underline">politique de confidentialité</Link>.
       </p>
 
       <h2>10. Droit applicable</h2>

@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { StaticPageShell } from '@/components/StaticPageShell'
 import { buildMetadata } from '@/lib/seo'
 
@@ -51,8 +53,8 @@ export default function LivraisonRetoursPage() {
       </p>
 
       <p>
-        Une question ? Consultez notre <a href="/faq" className="text-[color:var(--color-accent)] underline">FAQ</a>{' '}
-        ou <a href="/contact" className="text-[color:var(--color-accent)] underline">écrivez-nous</a>.
+        Une question ? Consultez notre <Link href="/faq" className="text-[color:var(--color-accent)] underline">FAQ</Link>{' '}
+        ou <Link href="/contact" className="text-[color:var(--color-accent)] underline">écrivez-nous</Link>.
       </p>
     </StaticPageShell>
   )
