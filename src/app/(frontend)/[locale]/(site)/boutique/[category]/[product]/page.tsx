@@ -6,20 +6,57 @@ import { notFound } from 'next/navigation'
 import { ProductBuyBox } from '@/components/cart/ProductBuyBox'
 import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
+import { defaultLocale, isLocale, type Locale } from '@/i18n/config'
 import type { Category, Media, Product } from '@/types/content'
 
 export const dynamic = 'force-dynamic'
 
-type Args = { params: Promise<{ category: string; product: string }> }
+type Args = { params: Promise<{ locale: string; category: string; product: string }> }
+
+const LABELS: Record<Locale, {
+  shop: string
+  notesTitle: string
+  detailsTitle: string
+  noteLabels: { top: string; heart: string; base: string }
+  univers: string
+  origine: string
+  methode: string
+  contenances: string
+  prix: string
+  fromPrice: string
+  buybox: { size: string; quantity: string; decrease: string; increase: string; outOfStock: string; added: string; addToCart: string }
+}> = {
+  fr: {
+    shop: 'Boutique',
+    notesTitle: 'Notes olfactives',
+    detailsTitle: 'Détails',
+    noteLabels: { top: 'Tête', heart: 'Cœur', base: 'Fond' },
+    univers: 'Univers',
+    origine: 'Origine',
+    methode: 'Méthode',
+    contenances: 'Contenances',
+    prix: 'Prix',
+    fromPrice: 'à partir de',
+    buybox: { size: 'Contenance', quantity: 'Quantité', decrease: 'Diminuer', increase: 'Augmenter', outOfStock: 'Rupture de stock', added: 'Ajouté ✓', addToCart: 'Ajouter au panier' },
+  },
+  en: {
+    shop: 'Boutique',
+    notesTitle: 'Olfactive notes',
+    detailsTitle: 'Details',
+    noteLabels: { top: 'Top', heart: 'Heart', base: 'Base' },
+    univers: 'Range',
+    origine: 'Origin',
+    methode: 'Method',
+    contenances: 'Sizes',
+    prix: 'Price',
+    fromPrice: 'from',
+    buybox: { size: 'Size', quantity: 'Quantity', decrease: 'Decrease', increase: 'Increase', outOfStock: 'Out of stock', added: 'Added ✓', addToCart: 'Add to cart' },
+  },
+}
 
 const getProduct = async (slug: string) => {
   const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'products',
-    where: { slug: { equals: slug } },
-    depth: 1,
-    limit: 1,
-  })
+  const { docs } = await payload.find({ collection: 'products', where: { slug: { equals: slug } }, depth: 1, limit: 1 })
   return (docs[0] as Product) ?? null
 }
 
@@ -27,7 +64,8 @@ const mediaUrl = (m: Media | number | null | undefined): string | undefined =>
   m && typeof m === 'object' ? (m.url ?? undefined) : undefined
 
 export const generateMetadata = async ({ params }: Args) => {
-  const { category, product: slug } = await params
+  const { locale, category, product: slug } = await params
+  const loc = isLocale(locale) ? locale : defaultLocale
   const product = await getProduct(slug)
   if (!product) return {}
   return buildMetadata({
@@ -36,11 +74,15 @@ export const generateMetadata = async ({ params }: Args) => {
     fallbackDescription: product.shortDescription ?? undefined,
     fallbackImage: product.mainImage,
     path: `/boutique/${category}/${product.slug}`,
+    locale: loc,
   })
 }
 
 export default async function ProductPage({ params }: Args) {
-  const { category: categorySlug, product: slug } = await params
+  const { locale: raw, category: categorySlug, product: slug } = await params
+  const locale = isLocale(raw) ? raw : defaultLocale
+  const t = LABELS[locale]
+  const p = (path: string) => `/${locale}${path}`
   const product = await getProduct(slug)
   if (!product) notFound()
 
@@ -52,20 +94,20 @@ export default async function ProductPage({ params }: Args) {
 
   const notes = product.olfactiveNotes
   const noteRows = [
-    { label: 'Tête', value: notes?.top },
-    { label: 'Cœur', value: notes?.heart },
-    { label: 'Fond', value: notes?.base },
+    { label: t.noteLabels.top, value: notes?.top },
+    { label: t.noteLabels.heart, value: notes?.heart },
+    { label: t.noteLabels.base, value: notes?.base },
   ].filter((n) => n.value)
 
   const contenances = variants.map((v) => v.label).filter(Boolean).join('   ·   ')
   const priceLabel =
-    lowestPrice !== undefined ? (variants.length > 1 ? `à partir de ${lowestPrice} €` : `${lowestPrice} €`) : undefined
+    lowestPrice !== undefined ? (variants.length > 1 ? `${t.fromPrice} ${lowestPrice} €` : `${lowestPrice} €`) : undefined
   const detailRows = [
-    { label: 'Univers', value: categoryName || undefined },
-    { label: 'Origine', value: product.origin?.country ?? undefined },
-    { label: 'Méthode', value: product.origin?.method ?? undefined },
-    { label: 'Contenances', value: contenances || undefined },
-    { label: 'Prix', value: priceLabel },
+    { label: t.univers, value: categoryName || undefined },
+    { label: t.origine, value: product.origin?.country ?? undefined },
+    { label: t.methode, value: product.origin?.method ?? undefined },
+    { label: t.contenances, value: contenances || undefined },
+    { label: t.prix, value: priceLabel },
   ].filter((r) => r.value)
 
   const jsonLd = {
@@ -89,12 +131,11 @@ export default async function ProductPage({ params }: Args) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <nav className="breadcrumb" aria-label="Fil d’Ariane">
-        <Link href="/parfums">Boutique</Link> <span aria-hidden="true">·</span>{' '}
-        <Link href={`/boutique/${categorySlug}`}>{categoryName}</Link> <span aria-hidden="true">·</span>{' '}
+        <Link href={p('/boutique')}>{t.shop}</Link> <span aria-hidden="true">·</span>{' '}
+        <Link href={p(`/boutique/${categorySlug}`)}>{categoryName}</Link> <span aria-hidden="true">·</span>{' '}
         {product.name}
       </nav>
 
-      {/* En-tête : grande image à gauche, nom + récit + achat à droite. */}
       <div className="product-hero">
         <div className={`product-hero__media${mainImageUrl ? ' has-image' : ''}`}>
           {mainImageUrl && (
@@ -127,20 +168,18 @@ export default async function ProductPage({ params }: Args) {
                 productName={product.name}
                 imageUrl={mainImageUrl}
                 variants={variants}
+                labels={t.buybox}
               />
             </div>
           ) : (
-            lowestPrice !== undefined && <p className="mt-8 text-2xl">à partir de {lowestPrice} €</p>
+            lowestPrice !== undefined && <p className="mt-8 text-2xl">{t.fromPrice} {lowestPrice} €</p>
           )}
         </div>
       </div>
 
-      {/* Notes olfactives — lignes étiquetées. */}
       {noteRows.length > 0 && (
         <section className="spec-block" aria-labelledby="notes-title">
-          <h2 id="notes-title" className="spec-block__title">
-            Notes olfactives
-          </h2>
+          <h2 id="notes-title" className="spec-block__title">{t.notesTitle}</h2>
           <div className="spec-list">
             {noteRows.map((n) => (
               <div key={n.label} className="spec-row">
@@ -152,12 +191,9 @@ export default async function ProductPage({ params }: Args) {
         </section>
       )}
 
-      {/* Détails — lignes étiquetées. */}
       {detailRows.length > 0 && (
         <section className="spec-block" aria-labelledby="details-title">
-          <h2 id="details-title" className="spec-block__title">
-            Détails
-          </h2>
+          <h2 id="details-title" className="spec-block__title">{t.detailsTitle}</h2>
           <div className="spec-list">
             {detailRows.map((r) => (
               <div key={r.label} className="spec-row">

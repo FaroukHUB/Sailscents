@@ -2,21 +2,62 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 import { useCart } from '@/components/cart/CartProvider'
+import { defaultLocale, isLocale, type Locale } from '@/i18n/config'
+
+const LABELS: Record<Locale, {
+  title: string
+  empty: string
+  discover: string
+  decrease: string
+  increase: string
+  remove: string
+  total: string
+  checkout: string
+  stripeNote: string
+}> = {
+  fr: {
+    title: 'Votre panier',
+    empty: 'Votre panier est vide.',
+    discover: 'Découvrir les parfums',
+    decrease: 'Diminuer',
+    increase: 'Augmenter',
+    remove: 'Retirer',
+    total: 'Total',
+    checkout: 'Passer au paiement',
+    stripeNote: 'Paiement sécurisé (Stripe) — en cours d’intégration.',
+  },
+  en: {
+    title: 'Your cart',
+    empty: 'Your cart is empty.',
+    discover: 'Discover the perfumes',
+    decrease: 'Decrease',
+    increase: 'Increase',
+    remove: 'Remove',
+    total: 'Total',
+    checkout: 'Proceed to checkout',
+    stripeNote: 'Secure payment (Stripe) — integration in progress.',
+  },
+}
 
 export default function CartPage() {
   const { lines, total, count, setQuantity, remove } = useCart()
+  const params = useParams()
+  const rawLocale = Array.isArray(params.locale) ? params.locale[0] : params.locale
+  const locale = isLocale(rawLocale ?? '') ? (rawLocale as Locale) : defaultLocale
+  const t = LABELS[locale]
 
   return (
     <section className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-4xl">Votre panier</h1>
+      <h1 className="text-4xl">{t.title}</h1>
 
       {count === 0 ? (
         <div className="mt-8 text-[color:var(--color-muted)]">
-          <p>Votre panier est vide.</p>
-          <Link href="/parfums" className="btn-gold mt-6 inline-block">
-            Découvrir les parfums
+          <p>{t.empty}</p>
+          <Link href={`/${locale}/parfums`} className="btn-gold mt-6 inline-block">
+            {t.discover}
           </Link>
         </div>
       ) : (
@@ -25,13 +66,7 @@ export default function CartPage() {
             {lines.map((line) => (
               <div key={`${line.productId}-${line.variantLabel}`} className="cart-line">
                 {line.imageUrl ? (
-                  <Image
-                    src={line.imageUrl}
-                    alt={line.productName}
-                    width={80}
-                    height={96}
-                    className="cart-line-img"
-                  />
+                  <Image src={line.imageUrl} alt={line.productName} width={80} height={96} className="cart-line-img" />
                 ) : (
                   <span className="cart-line-img" aria-hidden="true" />
                 )}
@@ -42,7 +77,7 @@ export default function CartPage() {
                     <button
                       type="button"
                       onClick={() => setQuantity(line.productId, line.variantLabel, line.quantity - 1)}
-                      aria-label="Diminuer"
+                      aria-label={t.decrease}
                     >
                       −
                     </button>
@@ -50,7 +85,7 @@ export default function CartPage() {
                     <button
                       type="button"
                       onClick={() => setQuantity(line.productId, line.variantLabel, line.quantity + 1)}
-                      aria-label="Augmenter"
+                      aria-label={t.increase}
                     >
                       +
                     </button>
@@ -63,7 +98,7 @@ export default function CartPage() {
                     onClick={() => remove(line.productId, line.variantLabel)}
                     className="mt-2 text-xs uppercase tracking-wide text-[color:var(--color-muted)] hover:text-[color:var(--color-accent)]"
                   >
-                    Retirer
+                    {t.remove}
                   </button>
                 </div>
               </div>
@@ -71,17 +106,15 @@ export default function CartPage() {
           </div>
 
           <div className="cart-summary">
-            <span className="text-sm uppercase tracking-[0.2em] text-[color:var(--color-muted)]">Total</span>
+            <span className="text-sm uppercase tracking-[0.2em] text-[color:var(--color-muted)]">{t.total}</span>
             <span className="cart-total">{total} €</span>
           </div>
 
           <div className="mt-8 flex flex-col items-end gap-2">
             <button type="button" className="btn-gold" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-              Passer au paiement
+              {t.checkout}
             </button>
-            <p className="text-xs text-[color:var(--color-muted)]">
-              Paiement sécurisé (Stripe) — en cours d’intégration.
-            </p>
+            <p className="text-xs text-[color:var(--color-muted)]">{t.stripeNote}</p>
           </div>
         </>
       )}
