@@ -1008,6 +1008,20 @@ a {
   }
 }
 
+/* Logo du site dans l'en-tête (image uploadée dans Media, sinon texte). */
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-logo__img {
+  height: 2.4rem;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  display: block;
+}
+
 /* Sélecteur de langue (FR · EN) dans l'en-tête : bascule « pastille »,
    la langue active surlignée en or pour être bien visible. */
 .lang-switcher {

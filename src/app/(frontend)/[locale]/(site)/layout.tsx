@@ -1,9 +1,11 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { CartLink } from '@/components/cart/CartLink'
 import { CartProvider } from '@/components/cart/CartProvider'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { SITE_NAME } from '@/lib/constants'
+import { getLogo } from '@/lib/getLogo'
 import { getDictionary } from '@/i18n'
 import { defaultLocale, isLocale } from '@/i18n/config'
 
@@ -15,6 +17,7 @@ export default async function SiteLayout({
   const locale = isLocale(raw) ? raw : defaultLocale
   const dict = getDictionary(locale)
   const p = (path: string) => `/${locale}${path}`
+  const logo = await getLogo()
 
   const navLinks = [
     { href: p('/parfums'), label: dict.nav.parfums },
@@ -37,8 +40,21 @@ export default async function SiteLayout({
     <CartProvider>
       <header className="border-b border-[color:var(--color-border)]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-          <Link href={p('')} className="font-[family-name:var(--font-display)] text-xl tracking-[0.2em] uppercase">
-            {SITE_NAME}
+          <Link href={p('')} aria-label={SITE_NAME} className="site-logo">
+            {logo ? (
+              <Image
+                src={logo.url}
+                alt={SITE_NAME}
+                width={logo.width}
+                height={logo.height}
+                className="site-logo__img"
+                priority
+              />
+            ) : (
+              <span className="font-[family-name:var(--font-display)] text-xl tracking-[0.2em] uppercase">
+                {SITE_NAME}
+              </span>
+            )}
           </Link>
           <nav className="hidden gap-8 text-sm tracking-wide uppercase md:flex">
             {navLinks.map((link) => (
