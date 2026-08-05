@@ -38,8 +38,8 @@ export default async function SiteLayout({
 
   return (
     <CartProvider>
-      <header className="border-b border-[color:var(--color-border)]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+      <header className="site-header">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href={p('')} aria-label={SITE_NAME} className="site-logo">
             {logo ? (
               <Image

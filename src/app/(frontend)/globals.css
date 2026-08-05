@@ -1008,6 +1008,13 @@ a {
   }
 }
 
+/* En-tête clair : le fond blanc du logo s'y fond, texte en encre foncée. */
+.site-header {
+  background: #ffffff;
+  color: #2b2116;
+  border-bottom: 1px solid rgba(43, 33, 22, 0.1);
+}
+
 /* Logo du site dans l'en-tête (image uploadée dans Media, sinon texte). */
 .site-logo {
   display: inline-flex;
@@ -1015,9 +1022,9 @@ a {
 }
 
 .site-logo__img {
-  height: 2.4rem;
+  height: 3.4rem;
   width: auto;
-  max-width: 220px;
+  max-width: 280px;
   object-fit: contain;
   display: block;
 }
