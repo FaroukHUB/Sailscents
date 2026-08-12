@@ -24,6 +24,59 @@ type Props = {
  * s'ouvre, son image se revele, puis on navigue vers la page. En mouvement
  * reduit, un simple fondu vers le noir remplace le coulissement.
  */
+// Son d'ouverture : un glissement de bois (comme un panneau shoji qui
+// coulisse) suivi d'un léger « toc » quand le battant arrive en butée.
+// Synthétisé via Web Audio (pas de fichier externe), volume bas, joué au clic.
+let audioCtx: AudioContext | null = null
+function playShojiSlide() {
+  try {
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!AC) return
+    audioCtx = audioCtx ?? new AC()
+    const ctx = audioCtx
+    if (ctx.state === 'suspended') void ctx.resume()
+
+    const now = ctx.currentTime
+    const dur = 0.7
+
+    // Frottement du bois : bruit filtré qui enfle puis s'éteint.
+    const size = Math.floor(ctx.sampleRate * dur)
+    const buffer = ctx.createBuffer(1, size, ctx.sampleRate)
+    const channel = buffer.getChannelData(0)
+    for (let i = 0; i < size; i++) channel[i] = Math.random() * 2 - 1
+    const noise = ctx.createBufferSource()
+    noise.buffer = buffer
+    const band = ctx.createBiquadFilter()
+    band.type = 'bandpass'
+    band.frequency.value = 430
+    band.Q.value = 0.7
+    const slideGain = ctx.createGain()
+    slideGain.gain.setValueAtTime(0.0001, now)
+    slideGain.gain.linearRampToValueAtTime(0.1, now + 0.12)
+    slideGain.gain.linearRampToValueAtTime(0.06, now + 0.45)
+    slideGain.gain.linearRampToValueAtTime(0.0001, now + dur)
+    noise.connect(band).connect(slideGain).connect(ctx.destination)
+    noise.start(now)
+    noise.stop(now + dur)
+
+    // « Toc » de bois : le battant touche le cadre.
+    const knockAt = now + dur * 0.9
+    const knock = ctx.createOscillator()
+    knock.type = 'triangle'
+    knock.frequency.setValueAtTime(190, knockAt)
+    knock.frequency.exponentialRampToValueAtTime(120, knockAt + 0.12)
+    const knockGain = ctx.createGain()
+    knockGain.gain.setValueAtTime(0.0001, knockAt)
+    knockGain.gain.exponentialRampToValueAtTime(0.07, knockAt + 0.008)
+    knockGain.gain.exponentialRampToValueAtTime(0.0001, knockAt + 0.16)
+    knock.connect(knockGain).connect(ctx.destination)
+    knock.start(knockAt)
+    knock.stop(knockAt + 0.18)
+  } catch {
+    // Le son est un bonus : en cas d'échec, on ignore silencieusement.
+  }
+}
+
 export function ShojiHome({ panels }: Props) {
   const router = useRouter()
   const [openingHref, setOpeningHref] = useState<string | null>(null)
@@ -46,6 +99,7 @@ export function ShojiHome({ panels }: Props) {
       return
     }
 
+    playShojiSlide()
     setOpeningHref(href)
     // Ouverture des battants, bref aperçu de l'image, puis navigation (la page
     // est déjà préchargée). Voile de couverture juste avant (voir globals.css).
