@@ -1444,6 +1444,17 @@ a {
   color: rgba(43, 33, 22, 0.72);
 }
 
+/* Mobile : le sous-titre descend en bas de la porte (comme écrit dans la
+   dernière case), séparé du titre qui reste plus haut. */
+@media (max-width: 767px) {
+  .shoji-col {
+    padding-bottom: 1.1rem;
+  }
+  .shoji-col .panel-subtitle {
+    margin-top: 2.75rem;
+  }
+}
+
 /* Voile d'entree : recouvre l'ecran juste avant la navigation. */
 .shoji-veil {
   position: fixed;
