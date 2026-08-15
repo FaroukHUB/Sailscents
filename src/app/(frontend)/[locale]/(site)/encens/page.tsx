@@ -1,16 +1,44 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
 import { HeroImage } from '@/components/HeroImage'
+import { groupProductsByDoor } from '@/lib/catalog'
+import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { getSectionImage } from '@/lib/sectionImage'
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from '@/lib/structured-data'
 import { getDictionary } from '@/i18n'
 import { defaultLocale, isLocale, type Locale } from '@/i18n/config'
+import { localizeCategoryName, localizeProduct } from '@/i18n/productTranslations'
+import type { Category, Media, Product } from '@/types/content'
 
 export const dynamic = 'force-dynamic'
 
 const PATH = '/encens'
+
+// Prix d'appel : la variante la moins chère.
+const fromPrice = (product: Product) => {
+  const prices = (product.variants ?? []).map((v) => v.price).filter((n): n is number => typeof n === 'number')
+  return prices.length ? Math.min(...prices) : null
+}
+
+// Image principale du produit (si renseignée dans l'admin), sinon null.
+const productImage = (product: Product) => {
+  const m = product.mainImage
+  return m && typeof m === 'object' ? (m as Media) : null
+}
+
+// Matières à brûler publiées, groupées par univers (Oud sauvage, plantation,
+// Bokhour, Lubano). Le contenu produit reste tel qu'il est en base.
+const getCatalogue = async () => {
+  const payload = await getPayloadClient()
+  const [{ docs: categories }, { docs: products }] = await Promise.all([
+    payload.find({ collection: 'categories', limit: 50, sort: 'name' }),
+    payload.find({ collection: 'products', where: { status: { equals: 'published' } }, limit: 200, depth: 1 }),
+  ])
+  return groupProductsByDoor('encens', categories as Category[], products as Product[])
+}
 
 const CONTENT = {
   fr: {
@@ -22,6 +50,12 @@ const CONTENT = {
     kicker: 'La voie du Kōdō',
     h1: 'Les Encens',
     lede: 'Bois à brûler et résines nobles dans la tradition japonaise de l’encens — des matières que l’on écoute plutôt qu’on ne sent, dans le silence et la lenteur.',
+    shop: {
+      kicker: 'La sélection',
+      h2: 'Nos matières à brûler à commander',
+      lede: 'Oud sauvage, bokhour et résines, vendus à la tôla (11,6 g). Choisissez sur la fiche de chaque matière.',
+    },
+    noteLabels: { top: 'Tête', heart: 'Cœur', base: 'Fond' },
     kodo: {
       kicker: '« Écouter » l’encens',
       h2: 'Le Kōdō, un art de l’attention',
@@ -53,6 +87,12 @@ const CONTENT = {
     kicker: 'The way of Kōdō',
     h1: 'Incense',
     lede: 'Burning woods and noble resins in the Japanese tradition of incense — materials one listens to rather than smells, in silence and slowness.',
+    shop: {
+      kicker: 'The selection',
+      h2: 'Our materials to burn, to order',
+      lede: 'Wild Oud, bokhour and resins, sold by the tola (11.6 g). Choose on each material’s page.',
+    },
+    noteLabels: { top: 'Top', heart: 'Heart', base: 'Base' },
     kodo: {
       kicker: '“Listening” to incense',
       h2: 'Kōdō, an art of attention',
@@ -91,6 +131,7 @@ export default async function EncensPage({ params }: { params: Promise<{ locale:
   const dict = getDictionary(locale)
   const p = (path: string) => `/${locale}${path}`
   const hero = await getSectionImage('collectionsPanel')
+  const catalogue = await getCatalogue()
 
   const jsonLd = [
     webPageJsonLd({ path: `/${locale}${PATH}`, name: t.name, description: t.metaDescription, type: 'CollectionPage' }),
@@ -123,6 +164,76 @@ export default async function EncensPage({ params }: { params: Promise<{ locale:
       </header>
 
       <div className="editorial-body">
+        {catalogue.length > 0 && (
+          <section className="editorial-section" aria-labelledby="acheter">
+            <p className="kicker">{t.shop.kicker}</p>
+            <h2 id="acheter" className="mt-3">{t.shop.h2}</h2>
+            <p className="editorial-lede">{t.shop.lede}</p>
+
+            {catalogue.map(({ category, items }) => {
+              const catName = localizeCategoryName(category, locale)
+              return (
+                <div key={category.id} className="mt-12">
+                  <p className="kicker">{catName}</p>
+                  <div className="mt-6 flex flex-col gap-10 md:gap-12">
+                    {items.map((rawProduct, i) => {
+                      const product = localizeProduct(rawProduct, locale)
+                      const price = fromPrice(product)
+                      const image = productImage(product)
+                      const origin = product.origin?.country
+                      const notes = product.olfactiveNotes
+                      const noteRows = [
+                        { label: t.noteLabels.top, value: notes?.top },
+                        { label: t.noteLabels.heart, value: notes?.heart },
+                        { label: t.noteLabels.base, value: notes?.base },
+                      ].filter((n) => n.value)
+                      return (
+                        <Link
+                          key={product.id}
+                          href={p(`/boutique/${category.slug}/${product.slug}`)}
+                          className={`product-row${i % 2 === 1 ? ' is-reversed' : ''}`}
+                        >
+                          <span className={`product-row__media${image ? ' has-image' : ''}`}>
+                            {image?.url && (
+                              <Image src={image.url} alt={image.alt ?? product.name} fill sizes="(min-width: 640px) 20rem, 100vw" className="product-row__img" />
+                            )}
+                          </span>
+                          <span className="product-row__body">
+                            <span className="product-row__kicker">
+                              {catName}
+                              {origin ? ` · ${origin}` : ''}
+                            </span>
+                            <span className="product-row__name">{product.name}</span>
+                            {product.shortDescription && (
+                              <span className="product-row__desc">{product.shortDescription}</span>
+                            )}
+                            {noteRows.length > 0 && (
+                              <span className="product-row__notes">
+                                {noteRows.map((n) => (
+                                  <span key={n.label} className="product-row__note">
+                                    <span className="product-row__note-label">{n.label}</span>
+                                    <span className="product-row__note-value">{n.value}</span>
+                                  </span>
+                                ))}
+                              </span>
+                            )}
+                            <span className="product-row__meta">
+                              {price != null && (
+                                <span className="product-row__price">{dict.common.fromPrice} {price} €</span>
+                              )}
+                              <span className="product-row__cta">{dict.common.discover}</span>
+                            </span>
+                          </span>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+          </section>
+        )}
+
         <section className="editorial-section" aria-labelledby="kodo">
           <div className="editorial-split">
             <div className="editorial-prose">

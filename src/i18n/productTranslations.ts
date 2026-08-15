@@ -135,6 +135,12 @@ const CATEGORIES_EN: Record<string, string> = {
   'les-ouds': 'Ouds',
   'les-roses': 'Roses',
   'les-mukhalat': 'Mukhalat',
+  'les-dehn': 'Dehn',
+  'les-ambres': 'Ambers',
+  'oud-sauvage': 'Wild Oud',
+  'plantation-oud': 'Plantation Oud',
+  'bokhour': 'Bokhour',
+  'lubano': 'Lubano',
 }
 
 /** Renvoie le produit avec le contenu EN superposé (repli FR) si langue = en. */

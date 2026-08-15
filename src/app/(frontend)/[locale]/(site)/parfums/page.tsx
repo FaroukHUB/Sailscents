@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { EditorialFigure } from '@/components/EditorialFigure'
 import { HeroImage } from '@/components/HeroImage'
+import { groupProductsByDoor } from '@/lib/catalog'
 import { getPayloadClient } from '@/lib/payload'
 import { buildMetadata } from '@/lib/seo'
 import { getSectionImage } from '@/lib/sectionImage'
@@ -37,15 +38,7 @@ const getCatalogue = async () => {
     payload.find({ collection: 'products', where: { status: { equals: 'published' } }, limit: 200, depth: 1 }),
   ])
 
-  return (categories as Category[])
-    .map((category) => ({
-      category,
-      items: (products as Product[]).filter((prod) => {
-        const catId = typeof prod.category === 'object' && prod.category ? prod.category.id : prod.category
-        return catId === category.id
-      }),
-    }))
-    .filter((group) => group.items.length > 0)
+  return groupProductsByDoor('parfums', categories as Category[], products as Product[])
 }
 
 const CONTENT = {

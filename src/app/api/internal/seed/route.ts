@@ -1,14 +1,21 @@
 import { NextResponse } from 'next/server'
 
-import { lexicalFromParagraphs } from '@/lib/lexical'
+import { CATALOG_CATEGORIES, CATALOG_PRODUCTS, catalogVariants } from '@/lib/catalog'
 import { getPayloadClient } from '@/lib/payload'
-import { SEED_CATEGORIES, SEED_DEFAULT_STOCK, SEED_PRODUCTS, seedDefaultVariants } from '@/lib/seedProducts'
 
 /**
- * Route temporaire a usage unique : peuple le catalogue (categories + produits)
- * en production a partir des textes du client. Idempotente : un slug deja
- * present est ignore (jamais ecrase). Produits crees en BROUILLON.
- * A supprimer une fois le catalogue en place.
+ * Route temporaire à usage unique : met le catalogue à jour en production à
+ * partir de la liste de prix du client (voir `src/lib/catalog.ts`).
+ *
+ * Idempotente et non destructive :
+ *  - Catégories : créées par slug si absentes, sinon réutilisées.
+ *  - Produits existants (par slug) : on met à jour UNIQUEMENT les prix
+ *    (variantes) et l'univers — le nom, les notes et la description saisis
+ *    dans l'admin sont préservés, ainsi que le statut (publié / brouillon).
+ *  - Produits absents : créés en BROUILLON, sans description (le client les
+ *    fournira ensuite), avec leurs variantes tarifées.
+ *
+ * Aucun produit n'est supprimé. À retirer une fois le catalogue en place.
  */
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -16,9 +23,9 @@ export const maxDuration = 60
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  // Comparaison tolerante : on ignore les espaces/retours de fin (fréquents dans
-  // les variables d'env) et le cas ou un « + » du secret a ete decode en espace
-  // par l'URL.
+  // Comparaison tolérante : on ignore les espaces/retours de fin (fréquents
+  // dans les variables d'env) et le cas où un « + » du secret a été décodé en
+  // espace par l'URL.
   const provided = (searchParams.get('secret') ?? '').trim()
   const expected = (process.env.PAYLOAD_SECRET ?? '').trim()
   const matches = provided === expected || provided.replace(/ /g, '+') === expected
@@ -28,11 +35,14 @@ export async function GET(request: Request) {
 
   try {
     const payload = await getPayloadClient()
-    const result = { categories: { created: [] as string[], skipped: [] as string[] }, products: { created: [] as string[], skipped: [] as string[] } }
+    const result = {
+      categories: { created: [] as string[], skipped: [] as string[] },
+      products: { created: [] as string[], updated: [] as string[], skipped: [] as string[] },
+    }
 
-    // Categories (par slug, idempotent) -> on garde l'id par slug.
+    // Univers (par slug, idempotent) — on garde l'id par slug.
     const categoryIdBySlug: Record<string, number> = {}
-    for (const cat of SEED_CATEGORIES) {
+    for (const cat of CATALOG_CATEGORIES) {
       const existing = await payload.find({ collection: 'categories', where: { slug: { equals: cat.slug } }, limit: 1 })
       if (existing.docs.length > 0) {
         categoryIdBySlug[cat.slug] = existing.docs[0].id as number
@@ -44,18 +54,27 @@ export async function GET(request: Request) {
       result.categories.created.push(cat.slug)
     }
 
-    // Produits (par slug, idempotent).
-    for (const p of SEED_PRODUCTS) {
-      const existing = await payload.find({ collection: 'products', where: { slug: { equals: p.slug } }, limit: 1 })
-      if (existing.docs.length > 0) {
-        result.products.skipped.push(p.slug)
-        continue
-      }
+    // Produits (par slug).
+    for (const p of CATALOG_PRODUCTS) {
       const categoryId = categoryIdBySlug[p.categorySlug]
       if (!categoryId) {
-        result.products.skipped.push(`${p.slug} (catégorie manquante)`)
+        result.products.skipped.push(`${p.slug} (univers manquant)`)
         continue
       }
+      const variants = catalogVariants(p)
+      const existing = await payload.find({ collection: 'products', where: { slug: { equals: p.slug } }, limit: 1 })
+
+      if (existing.docs.length > 0) {
+        // Mise à jour non destructive : prix (variantes) + univers seulement.
+        await payload.update({
+          collection: 'products',
+          id: existing.docs[0].id,
+          data: { category: categoryId, variants },
+        })
+        result.products.updated.push(p.slug)
+        continue
+      }
+
       await payload.create({
         collection: 'products',
         data: {
@@ -63,12 +82,7 @@ export async function GET(request: Request) {
           slug: p.slug,
           status: 'draft',
           category: categoryId,
-          shortDescription: p.shortDescription,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          description: lexicalFromParagraphs(p.description) as any,
-          olfactiveNotes: { heart: p.notesHeart },
-          origin: { country: p.originCountry, method: p.originMethod },
-          variants: p.variants ? p.variants.map((v) => ({ ...v, stock: SEED_DEFAULT_STOCK })) : seedDefaultVariants(),
+          variants,
         },
       })
       result.products.created.push(p.slug)
