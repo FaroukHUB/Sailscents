@@ -37,11 +37,12 @@ export const maxDuration = 60
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  // Comparaison tolérante : on ignore les espaces/retours de fin (fréquents
-  // dans les variables d'env) et le cas où un « + » du secret a été décodé en
-  // espace par l'URL.
+  // Protégée par une variable d'environnement DÉDIÉE : SEED_SECRET, dont TU
+  // choisis la valeur dans Vercel (indépendante de PAYLOAD_SECRET, qu'on ne
+  // touche pas). Comparaison tolérante : on ignore les espaces/retours de fin
+  // et le cas où un « + » du secret a été décodé en espace par l'URL.
   const provided = (searchParams.get('secret') ?? '').trim()
-  const expected = (process.env.PAYLOAD_SECRET ?? '').trim()
+  const expected = (process.env.SEED_SECRET ?? '').trim()
   const matches = provided === expected || provided.replace(/ /g, '+') === expected
   if (!expected || !matches) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
