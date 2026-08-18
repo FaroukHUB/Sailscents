@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server'
 
+import productCopy from '@/data/product-copy.json'
 import { CATALOG_CATEGORIES, CATALOG_PRODUCTS, catalogVariants } from '@/lib/catalog'
+import { lexicalFromParagraphs } from '@/lib/lexical'
 import { getPayloadClient } from '@/lib/payload'
+
+type ProductCopy = {
+  shortDescription?: string
+  notesTop?: string
+  notesHeart?: string
+  notesBase?: string
+  originCountry?: string
+  originMethod?: string
+  description?: string[]
+}
+
+const COPY: Record<string, ProductCopy> = productCopy
 
 /**
  * Route temporaire à usage unique : met le catalogue à jour en production à
@@ -62,27 +76,43 @@ export async function GET(request: Request) {
         continue
       }
       const variants = catalogVariants(p)
+      const copy = COPY[p.slug]
       const existing = await payload.find({ collection: 'products', where: { slug: { equals: p.slug } }, limit: 1 })
 
       if (existing.docs.length > 0) {
-        // Mise à jour non destructive : prix (variantes) + univers seulement.
+        // Mise à jour non destructive : on met à jour les prix (variantes),
+        // l'univers et on PUBLIE. Le nom, les notes et la description saisis
+        // en base sont préservés (on n'écrase jamais le contenu existant).
         await payload.update({
           collection: 'products',
           id: existing.docs[0].id,
-          data: { category: categoryId, variants },
+          data: { category: categoryId, variants, status: 'published' },
         })
         result.products.updated.push(p.slug)
         continue
       }
 
+      // Création : produit publié, avec sa fiche (accroche, notes, origine,
+      // description) issue de src/data/product-copy.json quand elle existe.
       await payload.create({
         collection: 'products',
         data: {
           name: p.name,
           slug: p.slug,
-          status: 'draft',
+          status: 'published',
           category: categoryId,
           variants,
+          ...(copy?.shortDescription ? { shortDescription: copy.shortDescription } : {}),
+          ...(copy?.notesTop || copy?.notesHeart || copy?.notesBase
+            ? { olfactiveNotes: { top: copy.notesTop, heart: copy.notesHeart, base: copy.notesBase } }
+            : {}),
+          ...(copy?.originCountry || copy?.originMethod
+            ? { origin: { country: copy.originCountry, method: copy.originMethod } }
+            : {}),
+          ...(copy?.description
+            ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              { description: lexicalFromParagraphs(copy.description) as any }
+            : {}),
         },
       })
       result.products.created.push(p.slug)
