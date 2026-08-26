@@ -32,7 +32,7 @@ function playShojiSlide() {
   try {
     if (typeof window === 'undefined') return
     const audio = new Audio('/sounds/shoji-door.mp3')
-    audio.volume = 0.85
+    audio.volume = 0.5
     void audio.play().catch(() => {})
   } catch {
     // Le son est un bonus : en cas d'échec, on ignore silencieusement.
