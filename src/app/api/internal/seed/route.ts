@@ -45,7 +45,14 @@ export async function GET(request: Request) {
   const expected = (process.env.SEED_SECRET ?? '').trim()
   const matches = provided === expected || provided.replace(/ /g, '+') === expected
   if (!expected || !matches) {
-    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+    // Diagnostic non sensible : indique si la variable SEED_SECRET est bien
+    // présente dans CE déploiement (booléen uniquement, la valeur n'est jamais
+    // exposée). Si `seedSecretConfigured` est false, le déploiement en ligne
+    // date d'avant la création de la variable → il faut (re)déployer.
+    return NextResponse.json(
+      { error: 'unauthorized', seedSecretConfigured: Boolean(expected), secretProvided: provided.length > 0 },
+      { status: 401 },
+    )
   }
 
   try {
