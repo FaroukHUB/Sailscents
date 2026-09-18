@@ -33,7 +33,9 @@ const COPY: Record<string, ProductCopy> = productCopy
  */
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
-export const maxDuration = 60
+// Plan Pro : jusqu'à 300 s. On lit toute la base en 2 requêtes groupées
+// (au lieu d'une recherche par produit) pour rester bien en dessous.
+export const maxDuration = 300
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -62,12 +64,21 @@ export async function GET(request: Request) {
       products: { created: [] as string[], updated: [] as string[], skipped: [] as string[] },
     }
 
-    // Univers (par slug, idempotent) — on garde l'id par slug.
+    // Lecture GROUPÉE de la base (2 requêtes, au lieu d'une par élément) :
+    // on charge tous les univers et tous les produits existants d'un coup,
+    // puis on travaille en mémoire. C'est ce qui évite le timeout.
+    const [allCategories, allProducts] = await Promise.all([
+      payload.find({ collection: 'categories', limit: 200, depth: 0 }),
+      payload.find({ collection: 'products', limit: 500, depth: 0 }),
+    ])
     const categoryIdBySlug: Record<string, number> = {}
+    for (const c of allCategories.docs as unknown as { id: number; slug: string }[]) categoryIdBySlug[c.slug] = c.id
+    const productIdBySlug: Record<string, number> = {}
+    for (const d of allProducts.docs as unknown as { id: number; slug: string }[]) productIdBySlug[d.slug] = d.id
+
+    // Univers manquants : créés une seule fois.
     for (const cat of CATALOG_CATEGORIES) {
-      const existing = await payload.find({ collection: 'categories', where: { slug: { equals: cat.slug } }, limit: 1 })
-      if (existing.docs.length > 0) {
-        categoryIdBySlug[cat.slug] = existing.docs[0].id as number
+      if (categoryIdBySlug[cat.slug]) {
         result.categories.skipped.push(cat.slug)
         continue
       }
@@ -76,7 +87,7 @@ export async function GET(request: Request) {
       result.categories.created.push(cat.slug)
     }
 
-    // Produits (par slug).
+    // Produits (par slug), à partir des maps en mémoire.
     for (const p of CATALOG_PRODUCTS) {
       const categoryId = categoryIdBySlug[p.categorySlug]
       if (!categoryId) {
@@ -85,15 +96,15 @@ export async function GET(request: Request) {
       }
       const variants = catalogVariants(p)
       const copy = COPY[p.slug]
-      const existing = await payload.find({ collection: 'products', where: { slug: { equals: p.slug } }, limit: 1 })
+      const existingId = productIdBySlug[p.slug]
 
-      if (existing.docs.length > 0) {
+      if (existingId) {
         // Mise à jour non destructive : on met à jour les prix (variantes),
         // l'univers et on PUBLIE. Le nom, les notes et la description saisis
         // en base sont préservés (on n'écrase jamais le contenu existant).
         await payload.update({
           collection: 'products',
-          id: existing.docs[0].id,
+          id: existingId,
           data: { category: categoryId, variants, status: 'published' },
         })
         result.products.updated.push(p.slug)
