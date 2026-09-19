@@ -1,19 +1,25 @@
 import Image from 'next/image'
 
-import type { Media } from '@/types/content'
+import { getMediaByAlt, type EditorialImage } from '@/lib/getMediaByAlt'
 
 type Props = {
-  media?: Media | number | null
+  /** Média déjà résolu (prioritaire s'il est fourni). */
+  media?: EditorialImage | null
+  /**
+   * Mot-clé « Alt » du média à afficher (convention Studio). Si aucun média
+   * n'est trouvé pour cette clé, on garde le placeholder « Photo à venir ».
+   */
+  imageKey?: string
   caption: string
 }
 
 /**
- * Figure d'une page editoriale. Si une image Payload est fournie, elle est
- * affichee ; sinon on garde l'aplat « Photo a venir » comme repere de mise en
- * page. Les images se televersent depuis l'admin (Global « Images des pages »).
+ * Figure d'une page éditoriale. L'image se téléverse depuis l'admin (Media) en
+ * mettant `imageKey` dans le champ « Alt ». Tant qu'aucune image ne porte cette
+ * clé, on garde l'aplat « Photo à venir » comme repère de mise en page.
  */
-export function EditorialFigure({ media, caption }: Props) {
-  const image = media && typeof media === 'object' ? (media as Media) : null
+export async function EditorialFigure({ media, imageKey, caption }: Props) {
+  const image = media ?? (imageKey ? await getMediaByAlt(imageKey) : null)
 
   if (image?.url) {
     return (

@@ -207,7 +207,7 @@ export default async function MaisonPage({ params }: { params: Promise<{ locale:
                 ))}
               </ul>
             </div>
-            <EditorialFigure caption={t.matieres.caption} />
+            <EditorialFigure imageKey="maison-matieres" caption={t.matieres.caption} />
           </div>
         </section>
 
@@ -220,7 +220,7 @@ export default async function MaisonPage({ params }: { params: Promise<{ locale:
               <h3>{t.exigence.h3}</h3>
               <p>{t.exigence.p2}</p>
             </div>
-            <EditorialFigure caption={t.exigence.caption} />
+            <EditorialFigure imageKey="maison-exigence" caption={t.exigence.caption} />
           </div>
         </section>
 

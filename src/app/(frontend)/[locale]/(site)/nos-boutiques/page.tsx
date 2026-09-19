@@ -215,7 +215,7 @@ export default async function NosBoutiquesPage({ params }: { params: Promise<{ l
                 {t.adresse.p2rest}
               </p>
             </div>
-            <EditorialFigure caption={t.adresse.caption} />
+            <EditorialFigure imageKey="boutique-adresse" caption={t.adresse.caption} />
           </div>
         </section>
 
@@ -227,7 +227,7 @@ export default async function NosBoutiquesPage({ params }: { params: Promise<{ l
               <p>{t.experience.p1}</p>
               <p>{t.experience.p2}</p>
             </div>
-            <EditorialFigure caption={t.experience.caption} />
+            <EditorialFigure imageKey="boutique-experience" caption={t.experience.caption} />
           </div>
         </section>
 

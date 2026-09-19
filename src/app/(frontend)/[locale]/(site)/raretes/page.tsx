@@ -117,7 +117,7 @@ export default async function RaretesPage({ params }: { params: Promise<{ locale
                 <h2 id={`r-${index}`} className="mt-3">{item.title}</h2>
                 <p>{item.text}</p>
               </div>
-              <EditorialFigure caption={item.caption} />
+              <EditorialFigure imageKey={`raretes-${index + 1}`} caption={item.caption} />
             </div>
           </section>
         ))}

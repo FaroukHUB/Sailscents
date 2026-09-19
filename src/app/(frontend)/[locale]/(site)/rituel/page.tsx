@@ -149,7 +149,7 @@ export default function RituelPage() {
                 <p>{moment.lead}</p>
                 <p>{moment.body}</p>
               </div>
-              <EditorialFigure caption={moment.caption} />
+              <EditorialFigure imageKey={`rituel-${index + 1}`} caption={moment.caption} />
             </div>
           </section>
         ))}

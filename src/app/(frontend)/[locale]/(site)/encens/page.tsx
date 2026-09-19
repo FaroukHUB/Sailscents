@@ -242,7 +242,7 @@ export default async function EncensPage({ params }: { params: Promise<{ locale:
               <p>{t.kodo.p1}</p>
               <p>{t.kodo.p2}</p>
             </div>
-            <EditorialFigure caption={t.kodo.caption} />
+            <EditorialFigure imageKey="encens-kodo" caption={t.kodo.caption} />
           </div>
         </section>
 
@@ -253,7 +253,7 @@ export default async function EncensPage({ params }: { params: Promise<{ locale:
               <h2 id="matieres" className="mt-3">{t.matieres.h2}</h2>
               <p>{t.matieres.p}</p>
             </div>
-            <EditorialFigure caption={t.matieres.caption} />
+            <EditorialFigure imageKey="encens-matieres" caption={t.matieres.caption} />
           </div>
         </section>
 

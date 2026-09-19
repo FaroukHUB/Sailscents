@@ -245,7 +245,7 @@ export default async function ParfumsPage({ params }: { params: Promise<{ locale
               <p>{t.art.p1}</p>
               <p>{t.art.p2}</p>
             </div>
-            <EditorialFigure caption={t.art.caption} />
+            <EditorialFigure imageKey="parfums-attar" caption={t.art.caption} />
           </div>
         </section>
 
@@ -257,7 +257,7 @@ export default async function ParfumsPage({ params }: { params: Promise<{ locale
               <p>{t.oud.p1}</p>
               <p>{t.oud.p2}</p>
             </div>
-            <EditorialFigure caption={t.oud.caption} />
+            <EditorialFigure imageKey="parfums-oud" caption={t.oud.caption} />
           </div>
         </section>
 
