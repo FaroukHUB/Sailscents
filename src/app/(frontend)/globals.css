@@ -728,7 +728,9 @@ a {
 .product-row__media {
   position: relative;
   flex-shrink: 0;
-  aspect-ratio: 3 / 2;
+  /* Mobile : cadre portrait pour ne pas rogner le haut des flacons
+     (le desktop repasse en largeur fixe plus bas). */
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: linear-gradient(165deg, #241a2a, #150f1b 82%);
 }
@@ -749,6 +751,8 @@ a {
 
 .product-row__img {
   object-fit: cover;
+  /* Cadrage légèrement vers le haut : on garde le bouchon/col du flacon. */
+  object-position: center 38%;
 }
 
 /* Zone texte a droite. */
